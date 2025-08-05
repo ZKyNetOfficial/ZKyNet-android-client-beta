@@ -89,7 +89,7 @@ TORUS VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgt
 ## Building
 
 ```sh
-git clone [torus-android-client-beta]
+git clone https://github.com/TheTorusProject/torus-android-client-beta.git
 cd torus-vpn-source
 ```
 
