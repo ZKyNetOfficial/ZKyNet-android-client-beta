@@ -1,0 +1,14 @@
+Características
+
+- Añade túneles mediante archivo .conf, zip, entrada manual o código QR
+- Conexión automática a VPN basada en Wi-Fi SSID, ethernet o datos móviles
+- Túneles divididos por aplicación con búsqueda
+- Soporte de WireGuard para los modos kernel y espacio de usuario
+- Soporte de Amnezia para el modo de espacio de usuario para protección DPI/censura
+- Compatible con VPN siempre activa
+- Exportación de túneles Amnezia y WireGuard a zip
+- Compatibilidad con Quick Tile para alternar entre VPN
+- Soporte de accesos directos estáticos para el túnel principal para la integración de automatización.
+- Soporte de automatización de intenciones para todos los túneles
+- Reinicio automático del servicio tras reiniciar
+- Medidas de ahorro de la batería

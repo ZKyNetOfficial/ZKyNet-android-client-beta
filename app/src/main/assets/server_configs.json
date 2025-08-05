@@ -1,0 +1,80 @@
+{
+  "version": "1.0",
+  "defaultRetryPolicy": {
+    "maxAttempts": 3,
+    "backoffMs": 1000,
+    "connectionTimeoutMs": 30000
+  },
+  "servers": [
+    {
+      "id": "test-server",
+      "displayName": "Test Server",
+      "location": "Test Location",
+      "country": "Test",
+      "apiUrl": "https://vpn.mediabeam.cc",
+      "token": "test-server-api-key-12345",
+      "isTestServer": true,
+      "pingEndpoint": "vpn.mediabeam.cc",
+      "retryAttempts": 3,
+      "retryDelayMs": 2000,
+      "connectionTimeoutMs": 30000,
+      "isEnabled": true
+    },
+    {
+      "id": "us-east-1",
+      "displayName": "New York",
+      "location": "New York",
+      "country": "United States",
+      "apiUrl": "https://us-east-1.your-domain.com:8090",
+      "token": "your-production-api-key-us-east",
+      "isTestServer": false,
+      "pingEndpoint": "us-east-1.your-domain.com",
+      "retryAttempts": 3,
+      "retryDelayMs": 2000,
+      "connectionTimeoutMs": 30000,
+      "isEnabled": true
+    },
+    {
+      "id": "us-west-1",
+      "displayName": "Los Angeles",
+      "location": "Los Angeles",
+      "country": "United States",
+      "apiUrl": "https://us-west-1.your-domain.com:8090",
+      "token": "your-production-api-key-us-west",
+      "isTestServer": false,
+      "pingEndpoint": "us-west-1.your-domain.com",
+      "retryAttempts": 3,
+      "retryDelayMs": 2000,
+      "connectionTimeoutMs": 30000,
+      "isEnabled": true
+    },
+    {
+      "id": "eu-west-1",
+      "displayName": "London",
+      "location": "London",
+      "country": "United Kingdom",
+      "apiUrl": "https://eu-west-1.your-domain.com:8090",
+      "token": "your-production-api-key-eu-west",
+      "isTestServer": false,
+      "pingEndpoint": "eu-west-1.your-domain.com",
+      "retryAttempts": 3,
+      "retryDelayMs": 2000,
+      "connectionTimeoutMs": 30000,
+      "isEnabled": true
+    },
+    {
+      "id": "eu-central-1",
+      "displayName": "Frankfurt",
+      "location": "Frankfurt",
+      "country": "Germany",
+      "apiUrl": "https://eu-central-1.your-domain.com:8090",
+      "token": "your-production-api-key-eu-central",
+      "isTestServer": false,
+      "pingEndpoint": "eu-central-1.your-domain.com",
+      "retryAttempts": 3,
+      "retryDelayMs": 2000,
+      "connectionTimeoutMs": 30000,
+      "isEnabled": true
+    }
+  ]
+}

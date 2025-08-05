@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+	<uses-permission android:name="android.permission.INTERNET" />
+	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--foreground service exempt android 14-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
+    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"
+		tools:ignore="ProtectedPermissions" />
+
+    <!--foreground service permissions-->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.REQUEST_IGNORE_BATTERY_OPTIMIZATIONS" />
+    <!--start service on boot permission-->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
+	<permission
+		android:name="${applicationId}.permission.CONTROL_TUNNELS"
+		android:label="@string/app_permission_title"
+		android:description="@string/app_permission_description"
+		android:icon="@mipmap/ic_launcher"
+		android:protectionLevel="dangerous" />
+
+    <uses-feature
+        android:name="android.software.leanback"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.touchscreen"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.location.gps"
+        android:required="false" />
+    <uses-feature
+        android:name="android.hardware.screen.portrait"
+        android:required="false" />
+	<uses-feature
+		android:name="android.hardware.gamepad"
+		android:required="false"/>
+
+	<uses-feature android:name="android.hardware.wifi"
+		android:required="false"/>
+
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+    <application
+        android:name=".WireGuardAutoTunnel"
+        android:allowBackup="false"
+        android:banner="@mipmap/ic_banner"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:enableOnBackInvokedCallback="true"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.App.Start"
+        tools:targetApi="tiramisu">
+		<activity
+			android:name="com.journeyapps.barcodescanner.CaptureActivity"
+			android:screenOrientation="portrait"
+			tools:replace="screenOrientation" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+			android:windowSoftInputMode="adjustNothing"
+            android:theme="@style/Theme.WireguardAutoTunnel"
+			android:configChanges="orientation|screenSize|keyboardHidden"
+			>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+				<action android:name="android.intent.action.SHOW_APP_INFO" />
+				<category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+                <action android:name="android.service.quicksettings.action.QS_TILE_PREFERENCES" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".core.shortcut.ShortcutsActivity"
+            android:enabled="true"
+            android:exported="false"
+			android:noHistory="true"
+			android:excludeFromRecents="true"
+			android:finishOnTaskLaunch="true"
+			android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoDisplay" />
+
+		<provider
+			android:name="androidx.core.content.FileProvider"
+			android:authorities="@string/provider"
+			android:exported="false"
+			android:grantUriPermissions="true">
+			<meta-data
+				android:name="android.support.FILE_PROVIDER_PATHS"
+				android:resource="@xml/file_paths" />
+		</provider>
+
+		<provider
+			android:name="androidx.startup.InitializationProvider"
+			android:authorities="${applicationId}.androidx-startup"
+			android:multiprocess="true"
+			tools:node="remove">
+		</provider>
+
+        <service
+            android:name=".core.service.tile.TunnelControlTile"
+            android:exported="true"
+            android:icon="@drawable/ic_notification"
+            android:label="@string/tunnel_control"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".core.service.tile.AutoTunnelControlTile"
+            android:exported="true"
+            android:icon="@drawable/ic_notification"
+            android:label="@string/auto_tunnel"
+            android:permission="android.permission.BIND_QUICK_SETTINGS_TILE">
+            <meta-data
+                android:name="android.service.quicksettings.ACTIVE_TILE"
+                android:value="true" />
+            <meta-data
+                android:name="android.service.quicksettings.TOGGLEABLE_TILE"
+                android:value="true" />
+
+            <intent-filter>
+                <action android:name="android.service.quicksettings.action.QS_TILE" />
+            </intent-filter>
+        </service>
+        <service
+            android:name=".core.service.autotunnel.AutoTunnelService"
+            android:enabled="true"
+            android:exported="false"
+            android:foregroundServiceType="systemExempted"
+            android:persistent="true"
+            android:stopWithTask="false"
+            tools:node="merge" />
+
+		<service
+			android:name=".core.service.TunnelForegroundService"
+			android:exported="false"
+			android:persistent="true"
+			android:foregroundServiceType="systemExempted"
+			android:permission="android.permission.BIND_VPN_SERVICE">
+			<intent-filter>
+				<action android:name="android.net.VpnService" />
+			</intent-filter>
+		</service>
+        <receiver
+            android:name=".core.broadcast.RestartReceiver"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+                <action android:name="com.htc.intent.action.QUICKBOOT_POWERON" />
+				<action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
+            </intent-filter>
+        </receiver>
+		<receiver
+			android:name=".core.broadcast.KernelReceiver"
+			android:exported="false"
+			android:permission="${applicationId}.permission.CONTROL_TUNNELS">
+			<intent-filter>
+				<action android:name="com.wireguard.android.action.REFRESH_TUNNEL_STATES" />
+			</intent-filter>
+		</receiver>
+		<!--custom security solution for easier user integration-->
+		<receiver
+			android:name=".core.broadcast.RemoteControlReceiver"
+			android:enabled="true"
+			android:exported="true" tools:ignore="ExportedReceiver">
+			<intent-filter>
+				<action android:name="com.zaneschepke.wireguardautotunnel.START_TUNNEL" />
+				<action android:name="com.zaneschepke.wireguardautotunnel.STOP_TUNNEL" />
+				<action android:name="com.zaneschepke.wireguardautotunnel.START_AUTO_TUNNEL" />
+				<action android:name="com.zaneschepke.wireguardautotunnel.STOP_AUTO_TUNNEL" />
+				<action android:name="com.zaneschepke.wireguardautotunnel.START_KILL_SWITCH" />
+				<action android:name="com.zaneschepke.wireguardautotunnel.STOP_KILL_SWITCH" />
+			</intent-filter>
+		</receiver>
+		<receiver
+			android:name=".core.broadcast.NotificationActionReceiver"
+			android:exported="false"
+			android:permission="${applicationId}.permission.CONTROL_TUNNELS">
+		</receiver>
+    </application>
+</manifest>

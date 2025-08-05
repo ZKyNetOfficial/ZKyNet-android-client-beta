@@ -1,0 +1,78 @@
+package com.zaneschepke.wireguardautotunnel.util.extensions
+
+import timber.log.Timber
+
+val hasNumberInParentheses = """^(.+?)\((\d+)\)$""".toRegex()
+
+fun String.isValidIpv4orIpv6Address(): Boolean {
+    val sanitized = removeSurrounding("[", "]")
+    val ipv6Pattern =
+        Regex(
+            "(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:)" +
+                "{1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]" +
+                "{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:" +
+                "[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4})" +
+                "{1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}" +
+                ":((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]" +
+                "{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}" +
+                "[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:)" +
+                "{1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))"
+        )
+    val ipv4Pattern =
+        Regex(
+            "^(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}" +
+                "(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$"
+        )
+    return ipv4Pattern.matches(sanitized) || ipv6Pattern.matches(sanitized)
+}
+
+fun String.hasNumberInParentheses(): Boolean {
+    return hasNumberInParentheses.matches(this)
+}
+
+// Function to extract name and number
+fun String.extractNameAndNumber(): Pair<String, Int>? {
+    val matchResult = hasNumberInParentheses.matchEntire(this)
+    return matchResult?.let { Pair(it.groupValues[1], it.groupValues[2].toInt()) }
+}
+
+fun List<String>.isMatchingToWildcardList(value: String): Boolean {
+    val excludeValues =
+        this.filter { it.startsWith("!") }.map { it.removePrefix("!").transformWildcardsToRegex() }
+    Timber.d("Excluded values: $excludeValues")
+    val includedValues = this.filter { !it.startsWith("!") }.map { it.transformWildcardsToRegex() }
+    Timber.d("Included values: $includedValues")
+    val matches = includedValues.filter { it.matches(value) }
+    val excludedMatches = excludeValues.filter { it.matches(value) }
+    Timber.d("Excluded matches: $excludedMatches")
+    Timber.d("Matches: $matches")
+    return matches.isNotEmpty() && excludedMatches.isEmpty()
+}
+
+fun String.transformWildcardsToRegex(): Regex {
+    return this.replaceUnescapedChar("*", ".*").replaceUnescapedChar("?", ".").toRegex()
+}
+
+fun String.replaceUnescapedChar(charToReplace: String, replacement: String): String {
+    val escapedChar = Regex.escape(charToReplace)
+    val regex = "(?<!\\\\)(?<!(?<!\\\\)\\\\)($escapedChar)".toRegex()
+    return regex.replace(this) { matchResult ->
+        if (
+            matchResult.range.first == 0 ||
+                this[matchResult.range.first - 1] != '\\' ||
+                (matchResult.range.first > 1 && this[matchResult.range.first - 2] == '\\')
+        ) {
+            replacement
+        } else {
+            matchResult.value
+        }
+    }
+}
+
+fun Iterable<String>.joinAndTrim(): String {
+    return this.joinToString(", ").trim()
+}
+
+fun String.toTrimmedList(): List<String> {
+    return this.split(",").map { it.trim() }.filter { it.isNotEmpty() }
+}
