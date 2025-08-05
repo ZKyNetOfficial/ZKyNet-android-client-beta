@@ -30,7 +30,6 @@ TORUS VPN - Customized VPN Client with Server Integration
 
 - [About](#about)
 - [Acknowledgements](#acknowledgements)
-- [Screenshots](#screenshots)
 - [Features](#features)
 - [Building](#building)
 - [Translation](#translation)
@@ -63,14 +62,6 @@ TORUS VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgt
 - [AmneziaWG](https://docs.amnezia.org/documentation/amnezia-wg/) - Amnezia Team (https://github.com/amnezia-vpn/amneziawg-android)
 - All contributors to the original WG Tunnel project
 
-## Screenshots
-
-</div>
-<div style="display: flex; flex-wrap: wrap; justify-content: left; gap: 10px;">
- <img label="Main" src="fastlane/metadata/android/en-US/images/phoneScreenshots/main_screen.png" width="200" />
- <img label="Settings" src="fastlane/metadata/android/en-US/images/phoneScreenshots/settings_screen.png" width="200" />
-  <img label="Auto" src="fastlane/metadata/android/en-US/images/phoneScreenshots/auto_screen.png" width="200" />
-  <img label="Config" src="fastlane/metadata/android/en-US/images/phoneScreenshots/config_screen.png" width="200" />
 </div>
 
 <div style="text-align: left;">
