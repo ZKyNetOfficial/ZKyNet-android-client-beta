@@ -11,7 +11,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.zaneschepke.wireguardautotunnel.ui.screens.vision.model.PrincipleItem
+import com.zaneschepke.wireguardautotunnel.ui.screens.vision.model.VisionContentProvider
+import com.zaneschepke.wireguardautotunnel.ui.screens.vision.theme.VisionDefaults
 
 /**
  * Component displaying TORUS company vision and mission statement.
@@ -19,6 +23,8 @@ import androidx.compose.ui.unit.dp
  */
 @Composable
 fun VisionSection() {
+    val content = VisionContentProvider.getVisionContent()
+    
     Card(
         modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
@@ -26,64 +32,80 @@ fun VisionSection() {
         )
     ) {
         Column(
-            modifier = Modifier.padding(20.dp),
-            verticalArrangement = Arrangement.spacedBy(16.dp)
+            modifier = Modifier.padding(VisionDefaults.sectionPadding),
+            verticalArrangement = Arrangement.spacedBy(VisionDefaults.sectionSpacing)
         ) {
-            Text(
-                text = "About TORUS",
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            CenteredSectionTitle(text = content.aboutTitle)
             
-            Text(
-                text = "TORUS aims to make strong, decentralized privacy tools not only accessible but widely adopted. By unifying proven technologies into a seamless experience, we're building a platform that balances user-friendly design, industry-grade scalability, and meaningful rewards for the people who keep the network running. The result? Better privacy for everyone by design, not by sacrifice.",
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            AboutContentCard(paragraphs = content.aboutParagraphs)
             
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(VisionDefaults.afterAboutSpacing))
             
-            Text(
-                text = "Core Principles",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.Bold
-                ),
-                color = MaterialTheme.colorScheme.onSurface
-            )
+            CenteredSectionTitle(text = content.principlesTitle)
             
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.height(VisionDefaults.beforePrinciplesSpacing))
             
-            // Expandable Core Principles
+            PrinciplesList(principles = content.principles)
+        }
+    }
+}
+
+/**
+ * Reusable centered section title component.
+ */
+@Composable
+private fun CenteredSectionTitle(text: String) {
+    Text(
+        text = text,
+        style = MaterialTheme.typography.headlineSmall.copy(
+            fontWeight = FontWeight.Bold
+        ),
+        color = MaterialTheme.colorScheme.onSurface,
+        textAlign = TextAlign.Center,
+        modifier = Modifier.fillMaxWidth()
+    )
+}
+
+/**
+ * Reusable about content card with multiple paragraphs.
+ */
+@Composable
+private fun AboutContentCard(paragraphs: List<String>) {
+    Card(
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = VisionDefaults.aboutCardAlpha)
+        ),
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Column(
+            modifier = Modifier.padding(VisionDefaults.aboutCardPadding),
+            verticalArrangement = Arrangement.spacedBy(VisionDefaults.paragraphSpacing)
+        ) {
+            paragraphs.forEachIndexed { index, paragraph ->
+                val isLastParagraph = index == paragraphs.lastIndex
+                Text(
+                    text = paragraph,
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        fontWeight = if (isLastParagraph) FontWeight.SemiBold else FontWeight.Normal
+                    ),
+                    color = if (isLastParagraph) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface
+                )
+            }
+        }
+    }
+}
+
+/**
+ * Reusable principles list component.
+ */
+@Composable
+private fun PrinciplesList(principles: List<PrincipleItem>) {
+    Column {
+        principles.forEach { principle ->
             ExpandableVisionItem(
-                icon = "🧩",
-                title = "Making Privacy Effortless",
-                description = "TORUS is built to simplify powerful privacy tools, dynamically balancing usability and protection so everyday users can benefit from advanced features without needing technical expertise."
-            )
-            
-            ExpandableVisionItem(
-                icon = "🔒",
-                title = "Privacy That Scales",
-                description = "Many privacy tools are limited by low adoption and fragmented setups which can inversely give you a more unique online fingerprint. TORUS aims to increase anonymity for all by promoting standardized, high-quality configurations that more users can trust and adopt."
-            )
-            
-            ExpandableVisionItem(
-                icon = "🌐",
-                title = "Hybrid-First Architecture",
-                description = "TORUS is being designed as a flexible network that combines decentralized nodes with scalable infrastructure. This hybrid model supports global reach, high availability, and a more resilient privacy layer ensuring performance without over reliance on centralized systems."
-            )
-            
-            ExpandableVisionItem(
-                icon = "💸",
-                title = "Aligned Incentives",
-                description = "TORUS is being built to reward contributors for powering the network—based on uptime, reliability, and overall value. A free tier helps increase the adoption of new users without undermining the earning potential of node operators, ensuring growth and sustainability go hand in hand."
-            )
-            
-            ExpandableVisionItem(
-                icon = "🛠️",
-                title = "Modular for the Future",
-                description = "The current client offers early users a simple way to show support and preview what's ahead. Dynamic browser features, multi-hop/mesh routing, and ZK-proof integrations are all part of the long-term roadmap."
+                icon = principle.icon,
+                title = principle.title,
+                description = principle.description
             )
         }
     }
@@ -108,14 +130,14 @@ private fun ExpandableVisionItem(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(vertical = 8.dp),
+                .padding(vertical = VisionDefaults.expandableCardPadding),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = icon,
                 style = MaterialTheme.typography.titleLarge,
-                modifier = Modifier.size(24.dp)
+                modifier = Modifier.size(VisionDefaults.expandableIconSize)
             )
             Column(
                 modifier = Modifier.weight(1f)
@@ -131,7 +153,8 @@ private fun ExpandableVisionItem(
             Icon(
                 imageVector = if (isExpanded) Icons.Outlined.ExpandLess else Icons.Outlined.ExpandMore,
                 contentDescription = if (isExpanded) "Collapse" else "Expand",
-                tint = MaterialTheme.colorScheme.primary
+                tint = MaterialTheme.colorScheme.primary,
+                modifier = Modifier.size(VisionDefaults.expandIconSize)
             )
         }
         
@@ -141,9 +164,9 @@ private fun ExpandableVisionItem(
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(
-                    start = 36.dp,
-                    bottom = 8.dp,
-                    end = 8.dp
+                    start = VisionDefaults.expandedContentStartPadding,
+                    bottom = VisionDefaults.expandedContentBottomPadding,
+                    end = VisionDefaults.expandedContentEndPadding
                 )
             )
         }
