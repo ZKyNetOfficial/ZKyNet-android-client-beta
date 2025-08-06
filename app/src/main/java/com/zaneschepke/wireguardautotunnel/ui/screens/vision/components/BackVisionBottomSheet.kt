@@ -29,7 +29,7 @@ fun BackVisionBottomSheet(
     onDismiss: () -> Unit,
     userSupportApi: UserSupportApi
 ) {
-    val sheetState = rememberModalBottomSheetState()
+    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     
     var email by remember { mutableStateOf("") }
