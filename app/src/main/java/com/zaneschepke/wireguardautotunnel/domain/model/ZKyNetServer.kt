@@ -1,10 +1,10 @@
 package com.zaneschepke.wireguardautotunnel.domain.model
 
 /**
- * Data class representing a TORUS VPN server.
- * Contains predefined server configurations for the TORUS VPN service.
+ * Data class representing a ZKyNet VPN server.
+ * Contains predefined server configurations for the ZKyNet VPN service.
  */
-data class TorusServer(
+data class ZKyNetServer(
     val id: String,
     val name: String,
     val location: String,

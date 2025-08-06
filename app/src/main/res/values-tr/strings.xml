@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">WG Tunnel</string>
+    <string name="app_name">ZKyNet</string>
     <string name="vpn_channel_id" translatable="false">VPN Channel</string>
     <string name="vpn_channel_name">VPN Bildirim Kanalı</string>
-    <string name="github_url" translatable="false">https://github.com/zaneschepke/wgtunnel/issues</string>
-    <string name="docs_url" translatable="false">https://zaneschepke.com/wgtunnel-docs/overview.html</string>
-    <string name="privacy_policy_url" translatable="false">https://zaneschepke.com/wgtunnel-docs/privacypolicy.html</string>
-    <string name="docs_wildcards" translatable="false">https://zaneschepke.com/wgtunnel-docs/features.html#wildcard-wi-fi-name-support</string>
+    <string name="github_url" translatable="false">https://github.com/ZKyNet/zkynet-android-client/issues</string>
+    <string name="docs_url" translatable="false">https://zkynet.com/docs/overview.html</string>
+    <string name="privacy_policy_url" translatable="false">https://zkynet.com/docs/privacy-policy.html</string>
+    <string name="docs_wildcards" translatable="false">https://zkynet.com/docs/features.html#wildcard-wi-fi-name-support</string>
     <string name="donate_url" translatable="false">https://zaneschepke.com/donate/</string>
     <string name="error_file_extension">Dosya .conf veya .zip değil</string>
     <string name="turn_off_tunnel">Bu işlem tünelin kapalı olmasını gerektirir</string>
@@ -106,10 +106,10 @@
     <string name="response_packet_magic_header">Yanıt paketi sihirli başlığı</string>
     <string name="transport_packet_magic_header">Taşıma paketi sihirli başlığı</string>
     <string name="underload_packet_magic_header">Düşük yük paketi sihirli başlığı</string>
-    <string name="telegram_url" translatable="false">https://t.me/wgtunnel</string>
+    <string name="telegram_url" translatable="false">https://t.me/zkynet</string>
     <string name="unsure_how">nasıl devam edeceğinizden emin değilseniz</string>
     <string name="see_the">Bakınız</string>
-    <string name="getting_started_url" translatable="false">https://zaneschepke.com/wgtunnel-docs/getting-started.html</string>
+    <string name="getting_started_url" translatable="false">https://zkynet.com/docs/getting-started.html</string>
     <string name="getting_started_guide">başlangıç kılavuzu</string>
     <string name="error_file_format">Geçersiz tünel yapılandırma formatı</string>
     <string name="restart_at_boot">Başlangıçta yeniden başlat</string>

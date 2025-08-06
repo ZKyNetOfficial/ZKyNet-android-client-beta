@@ -1,14 +1,14 @@
 <h1 align="center">
-TORUS VPN
+ZKyNet VPN
 </h1>
 
 <div align="center">
 
-A customized Android VPN client based on WG Tunnel, featuring TORUS server integration
+A customized Android VPN client based on WG Tunnel, featuring ZKyNet server integration
 with support for [WireGuard](https://www.wireguard.com/) and [AmneziaWG](https://docs.amnezia.org/documentation/amnezia-wg/) protocols
 <br />
 <br />
-TORUS VPN - Customized VPN Client with Server Integration
+ZKyNet VPN - Customized VPN Client with Server Integration
 
 </div>
 
@@ -16,13 +16,13 @@ TORUS VPN - Customized VPN Client with Server Integration
 
 <div align="center">
 
-<!-- TORUS VPN - Custom VPN Client -->
+<!-- ZKyNet VPN - Custom VPN Client -->
 
 </div>
 
 <div align="center">
 
-<!-- Community links removed for TORUS VPN custom implementation -->
+<!-- Community links removed for ZKyNet VPN custom implementation -->
 </div>
 
 <details open="open">
@@ -40,10 +40,10 @@ TORUS VPN - Customized VPN Client with Server Integration
 <div style="text-align: left;">
 
 ## About
-TORUS VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgtunnel) by Zane Schepke, modified to include TORUS server integration and management capabilities. This app combines the robust VPN functionality of WG Tunnel with custom server configuration management, supporting both [WireGuard](https://www.wireguard.com/) and [AmneziaWG](https://docs.amnezia.org/documentation/amnezia-wg/) protocols.
+ZKyNet VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgtunnel) by Zane Schepke, modified to include ZKyNet server integration and management capabilities. This app combines the robust VPN functionality of WG Tunnel with custom server configuration management, supporting both [WireGuard](https://www.wireguard.com/) and [AmneziaWG](https://docs.amnezia.org/documentation/amnezia-wg/) protocols.
 
-### Key TORUS Customizations
-- Integrated TORUS server management via `TorusVpnService`
+### Key ZKyNet Customizations
+- Integrated ZKyNet server management via `ZKyNetVpnService`
 - Per-server VPN toggles replacing default tunnel-adding flow
 - Hardcoded test server configuration support
 - Automatic config download and caching for production servers
@@ -68,8 +68,8 @@ TORUS VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgt
 
 ## Features
 
-### TORUS-Specific Features
-* **TORUS Server Integration**: Built-in server management and configuration
+### ZKyNet-Specific Features
+* **ZKyNet Server Integration**: Built-in server management and configuration
 * **Per-Server VPN Toggles**: Individual server connection controls
 * **Test Server Support**: Hardcoded test server configuration (peer1.conf)
 * **Automatic Config Management**: Download and cache production server configs
@@ -89,8 +89,8 @@ TORUS VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wgt
 ## Building
 
 ```sh
-git clone https://github.com/TheTorusProject/torus-android-client-beta.git
-cd torus-vpn-source
+git clone https://github.com/ZKyNet/zkynet-android-client-beta.git
+cd zkynet-vpn-source
 ```
 
 ```sh
@@ -101,11 +101,11 @@ cd torus-vpn-source
 
 ## Translation
 
-TORUS VPN inherits the translation infrastructure from the original WG Tunnel project. For translation contributions, please refer to the [original WG Tunnel project](https://github.com/zaneschepke/wgtunnel) on Weblate.
+ZKyNet VPN inherits the translation infrastructure from the original WG Tunnel project. For translation contributions, please refer to the [original WG Tunnel project](https://github.com/zaneschepke/wgtunnel) on Weblate.
 
 ## License and Legal
 
-TORUS VPN is based on [WG Tunnel](https://github.com/zaneschepke/wgtunnel) by Zane Schepke and is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+ZKyNet VPN is based on [WG Tunnel](https://github.com/zaneschepke/wgtunnel) by Zane Schepke and is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
 **Original Project**: [WG Tunnel](https://github.com/zaneschepke/wgtunnel) - Copyright © 2023-2025 Zane Schepke  
-**TORUS Modifications**: Copyright © 2025 TheTorusProject
+**ZKyNet Modifications**: Copyright © 2025 ZKyNet

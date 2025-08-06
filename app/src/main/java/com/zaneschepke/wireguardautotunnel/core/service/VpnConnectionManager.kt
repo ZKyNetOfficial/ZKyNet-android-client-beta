@@ -3,9 +3,9 @@ package com.zaneschepke.wireguardautotunnel.core.service
 import android.util.Log
 import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.core.tunnel.TunnelManager
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import com.zaneschepke.wireguardautotunnel.data.service.DynamicServerConfigManager
-import com.zaneschepke.wireguardautotunnel.data.service.TorusVpnService
+import com.zaneschepke.wireguardautotunnel.data.service.ZKyNetVpnService
 import com.zaneschepke.wireguardautotunnel.di.IoDispatcher
 import com.zaneschepke.wireguardautotunnel.domain.model.AppSettings
 import com.zaneschepke.wireguardautotunnel.domain.model.TunnelConf
@@ -36,7 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class VpnConnectionManager @Inject constructor(
     private val tunnelManager: TunnelManager,
-    private val torusVpnService: TorusVpnService,
+    private val zkynetVpnService: ZKyNetVpnService,
     private val configManager: DynamicServerConfigManager,
     private val appDataRepository: AppDataRepository,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -66,11 +66,11 @@ class VpnConnectionManager @Inject constructor(
     }
     
     /**
-     * Connects to a TORUS server with comprehensive error handling and retry logic.
+     * Connects to a ZKyNet server with comprehensive error handling and retry logic.
      * This is the main entry point for VPN connections.
      */
     suspend fun connectToServer(
-        serverConfig: TorusServerConfig,
+        serverConfig: ZKyNetServerConfig,
         currentTunnels: List<TunnelConf>,
         appSettings: AppSettings,
         onShowMessage: (StringValue) -> Unit,
@@ -199,7 +199,7 @@ class VpnConnectionManager @Inject constructor(
      * Attempts a single connection to the server
      */
     private suspend fun attemptConnection(
-        serverConfig: TorusServerConfig,
+        serverConfig: ZKyNetServerConfig,
         currentTunnels: List<TunnelConf>,
         appSettings: AppSettings,
         onRequestVpnPermission: () -> Unit
@@ -217,7 +217,7 @@ class VpnConnectionManager @Inject constructor(
         }
         
         // Step 2: Retrieve or download configuration
-        val configFilePath = torusVpnService.getServerConfig(serverConfig)
+        val configFilePath = zkynetVpnService.getServerConfig(serverConfig)
         if (configFilePath == null) {
             Timber.e("Failed to retrieve config for server: ${serverConfig.displayName}")
             return@withContext ConnectionResult.Error(
@@ -252,7 +252,7 @@ class VpnConnectionManager @Inject constructor(
         }
         
         // Step 4: Create tunnel configuration
-        val tunnelName = "TORUS ${serverConfig.displayName}"
+        val tunnelName = "ZKyNet ${serverConfig.displayName}"
         val tunnelConf = createTunnelConfiguration(tunnelName, configContent, currentTunnels)
         
         // Step 5: Save tunnel configuration
@@ -344,9 +344,9 @@ class VpnConnectionManager @Inject constructor(
      * Deletes configuration files (local and attempts remote cleanup)
      * Implements the requirement: "Delete old config locally + Send API call to delete remotely"
      */
-    private suspend fun deleteConfigFiles(configFilePath: String, serverConfig: TorusServerConfig) {
+    private suspend fun deleteConfigFiles(configFilePath: String, serverConfig: ZKyNetServerConfig) {
         try {
-            val cleanupSuccess = torusVpnService.cleanupOldConfig(configFilePath, serverConfig)
+            val cleanupSuccess = zkynetVpnService.cleanupOldConfig(configFilePath, serverConfig)
             Timber.i("Config cleanup completed for ${serverConfig.displayName}: $cleanupSuccess")
         } catch (e: Exception) {
             Timber.e(e, "Error during config cleanup")
@@ -357,7 +357,7 @@ class VpnConnectionManager @Inject constructor(
      * Validates connection health by testing internet connectivity
      * Implements: "VPN connects but no internet: Ping server; if ping fails, disconnect and redownload config"
      */
-    suspend fun validateConnectionHealth(activeServer: TorusServerConfig?): Boolean = withContext(ioDispatcher) {
+    suspend fun validateConnectionHealth(activeServer: ZKyNetServerConfig?): Boolean = withContext(ioDispatcher) {
         if (activeServer?.pingEndpoint == null) {
             return@withContext true // Cannot validate, assume healthy
         }

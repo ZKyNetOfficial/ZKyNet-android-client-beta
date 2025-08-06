@@ -126,8 +126,8 @@ class RepositoryModule {
         return GitHubUpdateRepository(
             gitHubApi,
             client,
-            "wgtunnel",
-            "wgtunnel",
+            "zkynet",
+            "zkynet",
             context,
             ioDispatcher,
         )

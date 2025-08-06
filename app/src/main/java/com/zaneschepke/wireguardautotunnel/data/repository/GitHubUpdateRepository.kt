@@ -42,13 +42,13 @@ class GitHubUpdateRepository(
             release.map { release ->
                 val apkAsset =
                     release.assets.find { asset ->
-                        asset.name.startsWith("wgtunnel-${Constants.STANDALONE_FLAVOR}-v") &&
+                        asset.name.startsWith("zkynet-${Constants.STANDALONE_FLAVOR}-v") &&
                             asset.name.endsWith(".apk")
                     }
                 val newVersion =
                     apkAsset
                         ?.name
-                        ?.removePrefix("wgtunnel-${Constants.STANDALONE_FLAVOR}-v")
+                        ?.removePrefix("zkynet-${Constants.STANDALONE_FLAVOR}-v")
                         ?.removeSuffix(".apk") ?: return@map null
 
                 Timber.i("Latest version: $newVersion, current version: $currentVersion")

@@ -11,19 +11,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.zaneschepke.wireguardautotunnel.domain.model.TorusServer
+import com.zaneschepke.wireguardautotunnel.domain.model.ZKyNetServer
 
 /**
- * Component displaying a list of hardcoded TORUS VPN servers.
+ * Component displaying a list of hardcoded ZKyNet VPN servers.
  * Shows available server locations with connection status and latency information.
  */
 @Composable
 fun ServerList(
-    onConnectToServer: (TorusServer) -> Unit,
+    onConnectToServer: (ZKyNetServer) -> Unit,
     connectedServerId: String? = null,
     modifier: Modifier = Modifier
 ) {
-    val servers = remember { getHardcodedTorusServers() }
+    val servers = remember { getHardcodedZKyNetServers() }
     
     LazyColumn(
         modifier = modifier,
@@ -31,7 +31,7 @@ fun ServerList(
     ) {
         item {
             Text(
-                text = "TORUS Servers",
+                text = "ZKyNet Servers",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -56,7 +56,7 @@ fun ServerList(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ServerItem(
-    server: TorusServer,
+    server: ZKyNetServer,
     isConnected: Boolean,
     onConnect: () -> Unit
 ) {
@@ -151,12 +151,12 @@ private fun ServerItem(
 }
 
 /**
- * Returns a list of hardcoded TORUS VPN servers.
+ * Returns a list of hardcoded ZKyNet VPN servers.
  * In a production app, this would likely come from a backend API.
  */
-private fun getHardcodedTorusServers(): List<TorusServer> {
+private fun getHardcodedZKyNetServers(): List<ZKyNetServer> {
     return listOf(
-        TorusServer(
+ZKyNetServer(
             id = "us-east-1",
             name = "New York",
             location = "New York",
@@ -167,7 +167,7 @@ private fun getHardcodedTorusServers(): List<TorusServer> {
             isOnline = true,
             latency = 25
         ),
-        TorusServer(
+ZKyNetServer(
             id = "us-west-1",
             name = "Los Angeles",
             location = "Los Angeles",
@@ -178,7 +178,7 @@ private fun getHardcodedTorusServers(): List<TorusServer> {
             isOnline = true,
             latency = 45
         ),
-        TorusServer(
+ZKyNetServer(
             id = "eu-west-1",
             name = "London",
             location = "London",
@@ -189,7 +189,7 @@ private fun getHardcodedTorusServers(): List<TorusServer> {
             isOnline = true,
             latency = 78
         ),
-        TorusServer(
+ZKyNetServer(
             id = "eu-central-1",
             name = "Frankfurt",
             location = "Frankfurt",
@@ -200,7 +200,7 @@ private fun getHardcodedTorusServers(): List<TorusServer> {
             isOnline = true,
             latency = 65
         ),
-        TorusServer(
+ZKyNetServer(
             id = "asia-east-1",
             name = "Tokyo",
             location = "Tokyo",

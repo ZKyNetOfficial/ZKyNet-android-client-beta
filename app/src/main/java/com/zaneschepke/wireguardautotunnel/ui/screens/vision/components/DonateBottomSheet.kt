@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -49,7 +49,7 @@ fun DonateBottomSheet(
             )
             
             Text(
-                text = "Support TORUS Development",
+                text = "Support ZKyNet Development",
                 style = MaterialTheme.typography.headlineSmall.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -74,7 +74,7 @@ fun DonateBottomSheet(
             
             Button(
                 onClick = {
-                    uriHandler.openUri("https://github.com/TheTorusProject")
+                    uriHandler.openUri("https://github.com/ZKyNet")
                     onDismiss()
                 },
                 modifier = Modifier.fillMaxWidth(),

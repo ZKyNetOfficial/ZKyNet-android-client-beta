@@ -18,7 +18,7 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.vision.components.VisionSe
 import com.zaneschepke.wireguardautotunnel.viewmodel.VisionViewModel
 
 /**
- * Vision screen displaying TORUS company mission and donation information.
+ * Vision screen displaying ZKyNet company mission and donation information.
  * This screen presents the company's vision for privacy and security,
  * along with options for users to support the project through donations.
  */

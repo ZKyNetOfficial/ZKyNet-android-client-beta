@@ -1,17 +1,17 @@
 <resources>
-    <string name="app_name">TORUS</string>
-	<string name="app_permission_title">TORUS Control Bridge</string>
+    <string name="app_name">ZKyNet</string>
+	<string name="app_permission_title">ZKyNet Control Bridge</string>
 	<string name="app_permission_description">Control VPN connections and security features.</string>
     <string name="vpn_channel_id" translatable="false">VPN Channel</string>
     <string name="vpn_channel_name">VPN Notification Channel</string>
-	<string name="github_url" translatable="false">https://github.com/wgtunnel/wgtunnel/issues</string>
-    <string name="docs_url" translatable="false">https://wgtunnel.com/docs/</string>
-    <string name="getting_started_url" translatable="false">https://wgtunnel.com/docs/getting-started</string>
-    <string name="privacy_policy_url" translatable="false">https://wgtunnel.com/docs/privacy-policy/</string>
-	<string name="docs_wildcards" translatable="false" >https://wgtunnel.com/docs/auto-tunneling/#use-name-wildcards</string>
+	<string name="github_url" translatable="false">https://github.com/ZKyNet/zkynet-android-client/issues</string>
+    <string name="docs_url" translatable="false">https://zkynet.com/docs/</string>
+    <string name="getting_started_url" translatable="false">https://zkynet.com/docs/getting-started</string>
+    <string name="privacy_policy_url" translatable="false">https://zkynet.com/docs/privacy-policy/</string>
+	<string name="docs_wildcards" translatable="false" >https://zkynet.com/docs/auto-tunneling/#use-name-wildcards</string>
 	<string name="donate_url" translatable="false">https://zaneschepke.com/donate/</string>
     <string name="matrix_url" translatable="false">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
-    <string name="telegram_url" translatable="false">https://t.me/wgtunnel</string>
+    <string name="telegram_url" translatable="false">https://t.me/zkynet</string>
     <string name="error_file_extension">File is not a .conf or .zip</string>
     <string name="turn_off_tunnel">Action requires tunnel off</string>
     <string name="no_tunnels">No tunnels added yet!</string>
@@ -24,7 +24,7 @@
     <string name="tunnel_on_ethernet">Tunnel on ethernet</string>
     <string name="prominent_background_location_message">This feature requires background location permission to enable Wi-Fi SSID monitoring even while the application is closed. For more details, please see the Privacy Policy linked on the Support screen.</string>
     <string name="prominent_background_location_title">Background Location Disclosure</string>
-    <string name="thank_you">Thank you for using TORUS!</string>
+    <string name="thank_you">Thank you for using ZKyNet!</string>
     <string name="trusted_ssid_value_description">Submit SSID</string>
     <string name="add_tunnels_text">Add from file or zip</string>
     <string name="open_file">File Open</string>
@@ -70,8 +70,8 @@
     <string name="unknown_error">Unknown error occurred</string>
     <string name="tunnel_on_wifi">Tunnel on untrusted wifi</string>
     <string name="docs_description">Read the docs</string>
-    <string name="my_email" translatable="false">support@torus-vpn.com</string>
-    <string name="email_subject">TORUS Support</string>
+    <string name="my_email" translatable="false">support@zkynet.com</string>
+    <string name="email_subject">ZKyNet Support</string>
     <string name="email_chooser">Send an email…</string>
     <string name="email_description">Send me an email</string>
     <string name="use_kernel">Use kernel module</string>

@@ -2,36 +2,36 @@
 
 ## Original Project
 
-This project (TORUS VPN) is based on **WG Tunnel** by Zane Schepke.
+This project (ZKyNet VPN) is based on **WG Tunnel** by Zane Schepke.
 
 - **Original Project**: [WG Tunnel](https://github.com/zaneschepke/wgtunnel)
 - **Original Author**: Zane Schepke
 - **Original Copyright**: Copyright (c) 2023-2025 Zane Schepke
 - **License**: MIT License
 
-## TORUS VPN Modifications
+## ZKyNet VPN Modifications
 
-TORUS VPN is a customized fork that adds server integration and management capabilities to the original WG Tunnel application.
+ZKyNet VPN is a customized fork that adds server integration and management capabilities to the original WG Tunnel application.
 
 ### Key Modifications Made
 
 #### New Files Added
-- `app/src/main/java/com/zaneschepke/wireguardautotunnel/data/service/TorusVpnService.kt` - TORUS server configuration management
-- `app/src/main/java/com/zaneschepke/wireguardautotunnel/data/model/TorusServerConfig.kt` - Server configuration data model
+- `app/src/main/java/com/zaneschepke/wireguardautotunnel/data/service/ZKyNetVpnService.kt` - ZKyNet server configuration management
+- `app/src/main/java/com/zaneschepke/wireguardautotunnel/data/model/ZKyNetServerConfig.kt` - Server configuration data model
 - `app/src/main/java/com/zaneschepke/wireguardautotunnel/ui/screens/main/ConnectScreen.kt` - Custom connection interface
-- `app/src/main/java/com/zaneschepke/wireguardautotunnel/ui/screens/main/components/TorusServerList.kt` - Server selection UI component
+- `app/src/main/java/com/zaneschepke/wireguardautotunnel/ui/screens/main/components/ZKyNetServerList.kt` - Server selection UI component
 - `CLAUDE.md` - Project documentation and development instructions
 - `.claude/settings.local.json` - Claude AI configuration
 - Various configuration and documentation files
 
 #### Existing Files Modified
-- `app/src/main/java/com/zaneschepke/wireguardautotunnel/viewmodel/AppViewModel.kt` - Enhanced with TORUS server integration
-- `app/build.gradle.kts` - Build configuration updates for TORUS features
+- `app/src/main/java/com/zaneschepke/wireguardautotunnel/viewmodel/AppViewModel.kt` - Enhanced with ZKyNet server integration
+- `app/build.gradle.kts` - Build configuration updates for ZKyNet features
 - `app/src/main/AndroidManifest.xml` - Manifest updates for new services and activities
-- Various UI screens and components - Modified to support TORUS server functionality
+- Various UI screens and components - Modified to support ZKyNet server functionality
 
 #### Core Functionality Changes
-1. **Server Management**: Added TORUS-specific server configuration and management
+1. **Server Management**: Added ZKyNet-specific server configuration and management
 2. **User Interface**: Replaced default tunnel-adding flow with per-server VPN toggles
 3. **Configuration Handling**: Added support for hardcoded test server configuration (peer1.conf)
 4. **API Integration**: Implemented automatic config download and caching for production servers
@@ -39,12 +39,12 @@ TORUS VPN is a customized fork that adds server integration and management capab
 
 ## License Compliance
 
-TORUS VPN maintains full compliance with the MIT License of the original WG Tunnel project:
+ZKyNet VPN maintains full compliance with the MIT License of the original WG Tunnel project:
 
 - ✅ Original copyright notice preserved in LICENSE file
 - ✅ Original license text included in LICENSE file
 - ✅ Attribution provided in README.md and this ATTRIBUTION.md file
-- ✅ Copyright headers added to new TORUS-specific files
+- ✅ Copyright headers added to new ZKyNet-specific files
 - ✅ No original copyright notices removed or altered
 
 ## Third-Party Acknowledgments

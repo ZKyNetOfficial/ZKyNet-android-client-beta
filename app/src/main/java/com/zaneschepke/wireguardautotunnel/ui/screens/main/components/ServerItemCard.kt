@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -26,8 +26,8 @@ import androidx.compose.ui.unit.dp
  * Server types for styling and behavior differentiation
  */
 enum class ServerType {
-    TORUS_REGULAR,
-    TORUS_TEST,
+    ZKYNET_REGULAR,
+    ZKYNET_TEST,
     MANUAL
 }
 
@@ -135,7 +135,7 @@ fun ServerItemCard(
                         
                         // Server type badge
                         when (server.serverType) {
-                            ServerType.TORUS_TEST -> {
+                            ServerType.ZKYNET_TEST -> {
                                 Badge(
                                     containerColor = MaterialTheme.colorScheme.secondary
                                 ) {
@@ -157,8 +157,8 @@ fun ServerItemCard(
                                     )
                                 }
                             }
-                            ServerType.TORUS_REGULAR -> {
-                                // No badge for regular TORUS servers
+                            ServerType.ZKYNET_REGULAR -> {
+                                // No badge for regular ZKyNet servers
                             }
                         }
                     }
@@ -236,7 +236,7 @@ private fun getContainerColor(serverType: ServerType, status: ConnectionStatus):
         status == ConnectionStatus.CONNECTED -> MaterialTheme.colorScheme.primaryContainer
         status in listOf(ConnectionStatus.FAILED, ConnectionStatus.CONFIG_ERROR, ConnectionStatus.NETWORK_ERROR) -> 
             MaterialTheme.colorScheme.errorContainer
-        serverType == ServerType.TORUS_TEST -> MaterialTheme.colorScheme.secondaryContainer
+        serverType == ServerType.ZKYNET_TEST -> MaterialTheme.colorScheme.secondaryContainer
         serverType == ServerType.MANUAL -> MaterialTheme.colorScheme.tertiaryContainer
         else -> MaterialTheme.colorScheme.surface
     }
@@ -248,7 +248,7 @@ private fun getIconColor(serverType: ServerType, status: ConnectionStatus): andr
         status == ConnectionStatus.CONNECTED -> MaterialTheme.colorScheme.primary
         status in listOf(ConnectionStatus.FAILED, ConnectionStatus.CONFIG_ERROR, ConnectionStatus.NETWORK_ERROR) -> 
             MaterialTheme.colorScheme.error
-        serverType == ServerType.TORUS_TEST -> MaterialTheme.colorScheme.secondary
+        serverType == ServerType.ZKYNET_TEST -> MaterialTheme.colorScheme.secondary
         serverType == ServerType.MANUAL -> MaterialTheme.colorScheme.tertiary
         else -> MaterialTheme.colorScheme.onSurface
     }
@@ -260,7 +260,7 @@ private fun getTextColor(serverType: ServerType, status: ConnectionStatus): andr
         status == ConnectionStatus.CONNECTED -> MaterialTheme.colorScheme.onPrimaryContainer
         status in listOf(ConnectionStatus.FAILED, ConnectionStatus.CONFIG_ERROR, ConnectionStatus.NETWORK_ERROR) -> 
             MaterialTheme.colorScheme.onErrorContainer
-        serverType == ServerType.TORUS_TEST -> MaterialTheme.colorScheme.onSecondaryContainer
+        serverType == ServerType.ZKYNET_TEST -> MaterialTheme.colorScheme.onSecondaryContainer
         serverType == ServerType.MANUAL -> MaterialTheme.colorScheme.onTertiaryContainer
         else -> MaterialTheme.colorScheme.onSurface
     }
@@ -272,7 +272,7 @@ private fun getLocationTextColor(serverType: ServerType, status: ConnectionStatu
         status == ConnectionStatus.CONNECTED -> MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.7f)
         status in listOf(ConnectionStatus.FAILED, ConnectionStatus.CONFIG_ERROR, ConnectionStatus.NETWORK_ERROR) -> 
             MaterialTheme.colorScheme.onErrorContainer.copy(alpha = 0.7f)
-        serverType == ServerType.TORUS_TEST -> MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
+        serverType == ServerType.ZKYNET_TEST -> MaterialTheme.colorScheme.onSecondaryContainer.copy(alpha = 0.7f)
         serverType == ServerType.MANUAL -> MaterialTheme.colorScheme.onTertiaryContainer.copy(alpha = 0.7f)
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
@@ -284,7 +284,7 @@ private fun getStatusTextColor(serverType: ServerType, status: ConnectionStatus)
         status == ConnectionStatus.CONNECTED -> MaterialTheme.colorScheme.primary
         status in listOf(ConnectionStatus.FAILED, ConnectionStatus.CONFIG_ERROR, ConnectionStatus.NETWORK_ERROR) -> 
             MaterialTheme.colorScheme.error
-        serverType == ServerType.TORUS_TEST -> MaterialTheme.colorScheme.secondary
+        serverType == ServerType.ZKYNET_TEST -> MaterialTheme.colorScheme.secondary
         serverType == ServerType.MANUAL -> MaterialTheme.colorScheme.tertiary
         else -> MaterialTheme.colorScheme.onSurfaceVariant
     }
@@ -292,9 +292,9 @@ private fun getStatusTextColor(serverType: ServerType, status: ConnectionStatus)
 
 private fun getServerIcon(serverType: ServerType): ImageVector {
     return when (serverType) {
-        ServerType.TORUS_TEST -> Icons.Outlined.Science
+        ServerType.ZKYNET_TEST -> Icons.Outlined.Science
         ServerType.MANUAL -> Icons.Outlined.Settings
-        ServerType.TORUS_REGULAR -> Icons.Outlined.LocationOn
+        ServerType.ZKYNET_REGULAR -> Icons.Outlined.LocationOn
     }
 }
 

@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -33,7 +33,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.core.tunnel.getValueById
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import com.zaneschepke.wireguardautotunnel.data.service.DynamicServerConfigManager
 import com.zaneschepke.wireguardautotunnel.domain.model.TunnelConf
 import com.zaneschepke.wireguardautotunnel.domain.state.TunnelState
@@ -47,7 +47,7 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.ServerDisp
 import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.ServerItemCard
 import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.ServerType
 import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.ConnectionStatus
-import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.TorusServerList
+import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.ZKyNetServerList
 import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.TunnelImportSheet
 import com.zaneschepke.wireguardautotunnel.ui.screens.main.components.UrlImportDialog
 import com.zaneschepke.wireguardautotunnel.ui.state.AppUiState
@@ -58,8 +58,8 @@ import com.zaneschepke.wireguardautotunnel.viewmodel.AppViewModel
 import com.zaneschepke.wireguardautotunnel.viewmodel.event.AppEvent
 
 /**
- * Main connect screen for TORUS VPN showing available servers.
- * Simplified interface focused on connecting to predefined TORUS servers
+ * Main connect screen for ZKyNet VPN showing available servers.
+ * Simplified interface focused on connecting to predefined ZKyNet servers
  * rather than managing custom tunnel configurations.
  */
 @Composable
@@ -118,14 +118,14 @@ fun ConnectScreen(
     // Collect server configurations using the new state pattern
     val configurationState by configManager.configurationState.collectAsState()
     
-    // Check if any TORUS tunnels are currently active
+    // Check if any ZKyNet tunnels are currently active
     val activeTunnels = appUiState.activeTunnels
-    val torusActiveTunnel = activeTunnels.keys.find { it.tunName.startsWith("TORUS ") }
-    val connectedServerId = torusActiveTunnel?.let { tunnel ->
+    val zkynetActiveTunnel = activeTunnels.keys.find { it.tunName.startsWith("ZKyNet ") }
+    val connectedServerId = zkynetActiveTunnel?.let { tunnel ->
         when (val state = configurationState) {
             is DynamicServerConfigManager.ConfigurationState.Success -> {
                 state.servers.find { server -> 
-                    tunnel.tunName == "TORUS ${server.displayName}"
+                    tunnel.tunName == "ZKyNet ${server.displayName}"
                 }?.id
             }
             else -> null
@@ -198,14 +198,14 @@ fun ConnectScreen(
     ) {
         // Connection Status Header
         ConnectionStatusCard(
-            isConnected = torusActiveTunnel != null,
-            connectedServerName = torusActiveTunnel?.let { tunnel ->
-                // Extract server name from tunnel name (remove "TORUS " prefix)
-                tunnel.tunName.removePrefix("TORUS ")
+            isConnected = zkynetActiveTunnel != null,
+            connectedServerName = zkynetActiveTunnel?.let { tunnel ->
+                // Extract server name from tunnel name (remove "ZKyNet " prefix)
+                tunnel.tunName.removePrefix("ZKyNet ")
             },
             onDisconnect = { 
-                // Disconnect the active TORUS tunnel
-                torusActiveTunnel?.let { tunnel ->
+                // Disconnect the active ZKyNet tunnel
+                zkynetActiveTunnel?.let { tunnel ->
                     viewModel.handleEvent(AppEvent.StopTunnel(tunnel))
                 }
             }
@@ -302,8 +302,8 @@ fun ConnectScreen(
             }
             
             is DynamicServerConfigManager.ConfigurationState.Success -> {
-                // TORUS Server List
-                TorusServerList(
+                // ZKyNet Server List
+                ZKyNetServerList(
                     servers = state.servers,
                     onConnectToServer = { server ->
                         if (connectedServerId != server.id) {
@@ -312,8 +312,8 @@ fun ConnectScreen(
                             activeTunnel?.let { tunnel ->
                                 viewModel.handleEvent(AppEvent.StopTunnel(tunnel))
                             }
-                            // Connect to TORUS server using the AppViewModel
-                            viewModel.handleEvent(AppEvent.ConnectToTorusServer(server))
+                            // Connect to ZKyNet server using the AppViewModel
+                            viewModel.handleEvent(AppEvent.ConnectToZKyNetServer(server))
                         }
                     },
                     onCustomEndpointClick = {
@@ -411,9 +411,9 @@ private fun ManualTunnelsSection(
     onEditTunnel: (TunnelConf) -> Unit,
     onRetryConnection: (TunnelConf) -> Unit
 ) {
-    // Filter manual tunnels (non-TORUS tunnels)
+    // Filter manual tunnels (non-ZKyNet tunnels)
     val manualTunnels = appUiState.tunnels.filter { tunnel ->
-        !tunnel.tunName.startsWith("TORUS ")
+        !tunnel.tunName.startsWith("ZKyNet ")
     }
     
     if (manualTunnels.isNotEmpty()) {
@@ -501,7 +501,7 @@ private fun ManualTunnelsSection(
                 )
             }
             
-            // Add spacing between manual and TORUS sections
+            // Add spacing between manual and ZKyNet sections
             Spacer(modifier = Modifier.height(16.dp))
         }
     }

@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 /**
  * Component for displaying donation information and call-to-action.
- * Explains how user donations support the TORUS VPN project and mission.
+ * Explains how user donations support the ZKyNet VPN project and mission.
  */
 @Composable
 fun DonationSection() {
@@ -79,7 +79,7 @@ fun DonationSection() {
                 )
                 Spacer(modifier = Modifier.width(8.dp))
                 Text(
-                    text = "Support TORUS",
+                    text = "Support ZKyNet",
                     style = MaterialTheme.typography.titleMedium.copy(
                         fontWeight = FontWeight.SemiBold
                     )

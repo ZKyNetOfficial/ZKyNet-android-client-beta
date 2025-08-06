@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client  
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client  
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -10,11 +10,11 @@
 package com.zaneschepke.wireguardautotunnel.data.model
 
 /**
- * Configuration data class for TORUS VPN servers.
+ * Configuration data class for ZKyNet VPN servers.
  * This contains the backend API details and authentication tokens
  * needed to download WireGuard configuration files.
  */
-data class TorusServerConfig(
+data class ZKyNetServerConfig(
     val id: String,
     val displayName: String,
     val location: String,
@@ -29,4 +29,3 @@ data class TorusServerConfig(
     val connectionTimeoutMs: Long = 30000, // Connection timeout
     val isEnabled: Boolean = true // Whether this server is available for connection
 )
-

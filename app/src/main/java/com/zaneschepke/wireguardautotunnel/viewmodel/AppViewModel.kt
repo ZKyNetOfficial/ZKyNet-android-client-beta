@@ -18,9 +18,9 @@ import com.zaneschepke.wireguardautotunnel.core.service.ServiceManager
 import com.zaneschepke.wireguardautotunnel.core.service.VpnConnectionManager
 import com.zaneschepke.wireguardautotunnel.core.shortcut.ShortcutManager
 import com.zaneschepke.wireguardautotunnel.core.tunnel.TunnelManager
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import com.zaneschepke.wireguardautotunnel.data.service.DynamicServerConfigManager
-import com.zaneschepke.wireguardautotunnel.data.service.TorusVpnService
+import com.zaneschepke.wireguardautotunnel.data.service.ZKyNetVpnService
 import com.zaneschepke.wireguardautotunnel.di.AppShell
 import com.zaneschepke.wireguardautotunnel.di.IoDispatcher
 import com.zaneschepke.wireguardautotunnel.di.MainDispatcher
@@ -69,7 +69,7 @@ constructor(
     private val logReader: LogReader,
     private val fileUtils: FileUtils,
     private val shortcutManager: ShortcutManager,
-    private val torusVpnService: TorusVpnService,
+    private val zkynetVpnService: ZKyNetVpnService,
     private val configManager: DynamicServerConfigManager,
     private val vpnConnectionManager: VpnConnectionManager,
     networkMonitor: NetworkMonitor,
@@ -174,7 +174,7 @@ constructor(
                     AppEvent.SetBatteryOptimizeDisableShown -> setBatteryOptimizeDisableShown()
                     is AppEvent.StartTunnel -> handleStartTunnel(event.tunnel, state.appSettings)
                     is AppEvent.StopTunnel -> handleStopTunnel(event.tunnel)
-                    is AppEvent.ConnectToTorusServer -> handleConnectToTorusServer(event.serverConfig, state.tunnels, state.appSettings)
+                    is AppEvent.ConnectToZKyNetServer -> handleConnectToZKyNetServer(event.serverConfig, state.tunnels, state.appSettings)
                     AppEvent.ReloadServerConfigs -> handleReloadServerConfigs()
                     AppEvent.ToggleAutoTunnel -> handleToggleAutoTunnel(state)
                     is AppEvent.ToggleTunnelStatsExpanded ->
@@ -837,16 +837,16 @@ constructor(
     }
 
     /**
-     * Handles connection to a TORUS VPN server using the centralized VpnConnectionManager.
+     * Handles connection to a ZKyNet VPN server using the centralized VpnConnectionManager.
      * This provides robust error handling, retry logic, and connection validation.
      */
-    private suspend fun handleConnectToTorusServer(
-        serverConfig: TorusServerConfig,
+    private suspend fun handleConnectToZKyNetServer(
+        serverConfig: ZKyNetServerConfig,
         currentTunnels: List<TunnelConf>,
         appSettings: AppSettings
     ) = withContext(ioDispatcher) {
         try {
-            Timber.i("Starting connection to TORUS server: ${serverConfig.displayName}")
+            Timber.i("Starting connection to ZKyNet server: ${serverConfig.displayName}")
             
             val result = vpnConnectionManager.connectToServer(
                 serverConfig = serverConfig,
@@ -874,7 +874,7 @@ constructor(
             }
             
         } catch (e: Exception) {
-            Timber.e(e, "Unexpected error connecting to TORUS server: ${serverConfig.displayName}")
+            Timber.e(e, "Unexpected error connecting to ZKyNet server: ${serverConfig.displayName}")
             handleShowMessage(StringValue.DynamicString("Failed to connect to ${serverConfig.displayName}: ${e.message}"))
         }
     }

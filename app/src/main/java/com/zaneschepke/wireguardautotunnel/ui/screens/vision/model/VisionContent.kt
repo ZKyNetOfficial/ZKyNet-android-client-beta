@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -37,9 +37,9 @@ object VisionContentProvider {
     
     fun getVisionContent(): VisionContent {
         return VisionContent(
-            aboutTitle = "About TORUS",
+            aboutTitle = "About ZKyNet",
             aboutParagraphs = listOf(
-                "TORUS aims to make strong, decentralized privacy tools not only accessible but widely adopted.",
+                "ZKyNet aims to make strong, decentralized privacy tools not only accessible but widely adopted.",
                 "By unifying proven technologies into a seamless experience, we're building a platform that balances user-friendly design, industry-grade scalability, and meaningful rewards for the people who keep the network running.",
                 "The result? Better privacy for everyone by design, not by sacrifice."
             ),
@@ -48,22 +48,22 @@ object VisionContentProvider {
                 PrincipleItem(
                     icon = "🧩",
                     title = "Making Privacy Effortless",
-                    description = "TORUS is built to simplify powerful privacy tools, dynamically balancing usability and protection so everyday users can benefit from advanced features without needing technical expertise."
+                    description = "ZKyNet is built to simplify powerful privacy tools, dynamically balancing usability and protection so everyday users can benefit from advanced features without needing technical expertise."
                 ),
                 PrincipleItem(
                     icon = "🔒",
                     title = "Privacy That Scales",
-                    description = "Many privacy tools are limited by low adoption and fragmented setups which can inversely give you a more unique online fingerprint. TORUS aims to increase anonymity for all by promoting standardized, high-quality configurations that more users can trust and adopt."
+                    description = "Many privacy tools are limited by low adoption and fragmented setups which can inversely give you a more unique online fingerprint. ZKyNet aims to increase anonymity for all by promoting standardized, high-quality configurations that more users can trust and adopt."
                 ),
                 PrincipleItem(
                     icon = "🌐",
                     title = "Hybrid-First Architecture",
-                    description = "TORUS is being designed as a flexible network that combines decentralized nodes with scalable infrastructure. This hybrid model supports global reach, high availability, and a more resilient privacy layer ensuring performance without over reliance on centralized systems."
+                    description = "ZKyNet is being designed as a flexible network that combines decentralized nodes with scalable infrastructure. This hybrid model supports global reach, high availability, and a more resilient privacy layer ensuring performance without over reliance on centralized systems."
                 ),
                 PrincipleItem(
                     icon = "💸",
                     title = "Aligned Incentives",
-                    description = "TORUS is being built to reward contributors for powering the network—based on uptime, reliability, and overall value. A free tier helps increase the adoption of new users without undermining the earning potential of node operators, ensuring growth and sustainability go hand in hand."
+                    description = "ZKyNet is being built to reward contributors for powering the network—based on uptime, reliability, and overall value. A free tier helps increase the adoption of new users without undermining the earning potential of node operators, ensuring growth and sustainability go hand in hand."
                 ),
                 PrincipleItem(
                     icon = "🛠️",

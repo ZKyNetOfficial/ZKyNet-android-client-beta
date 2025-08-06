@@ -18,7 +18,7 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.vision.model.VisionContent
 import com.zaneschepke.wireguardautotunnel.ui.screens.vision.theme.VisionDefaults
 
 /**
- * Component displaying TORUS company vision and mission statement.
+ * Component displaying ZKyNet company vision and mission statement.
  * Presents core values and goals related to privacy, security, and internet freedom.
  */
 @Composable

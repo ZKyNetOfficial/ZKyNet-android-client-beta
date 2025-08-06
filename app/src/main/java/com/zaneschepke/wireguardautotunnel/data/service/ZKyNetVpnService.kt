@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -12,7 +12,7 @@ package com.zaneschepke.wireguardautotunnel.data.service
 import android.content.Context
 import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
@@ -24,23 +24,23 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Service class for managing TORUS VPN server connections.
+ * Service class for managing ZKyNet VPN server connections.
  * Handles config file management, API downloading, and local storage operations.
  */
 @Singleton
-class TorusVpnService @Inject constructor(
+class ZKyNetVpnService @Inject constructor(
     @ApplicationContext private val context: Context,
     private val httpClient: OkHttpClient
 ) {
     
     companion object {
-        private const val TAG = "TorusVpnService"
+        private const val TAG = "ZKyNetVpnService"
         private const val CONFIG_FILE_EXTENSION = ".conf"
     }
     
     // Use internal app storage directory that doesn't require permissions
     private val configDirectory: File
-        get() = File(context.filesDir, "torus_configs").apply {
+        get() = File(context.filesDir, "zkynet_configs").apply {
             if (!exists()) mkdirs()
         }
     
@@ -51,7 +51,7 @@ class TorusVpnService @Inject constructor(
      * @param serverConfig The server configuration to connect to
      * @return The file path of the configuration file, or null if failed
      */
-    suspend fun getServerConfig(serverConfig: TorusServerConfig): String? = withContext(Dispatchers.IO) {
+    suspend fun getServerConfig(serverConfig: ZKyNetServerConfig): String? = withContext(Dispatchers.IO) {
         Log.i(TAG, "Starting config retrieval for server: ${serverConfig.id}")
         
         // All servers now download configs from their respective API endpoints
@@ -102,7 +102,7 @@ class TorusVpnService @Inject constructor(
      * @return The full path of the saved config file, or null if failed
      */
     private suspend fun downloadConfigFromApi(
-        serverConfig: TorusServerConfig,
+        serverConfig: ZKyNetServerConfig,
         baseFileName: String
     ): String? = withContext(Dispatchers.IO) {
         
@@ -145,7 +145,7 @@ class TorusVpnService @Inject constructor(
      * @return The config content if successful, null otherwise
      */
     private suspend fun downloadConfigWithAutoCreation(
-        serverConfig: TorusServerConfig, 
+        serverConfig: ZKyNetServerConfig, 
         peerId: String
     ): String? = withContext(Dispatchers.IO) {
         try {
@@ -270,7 +270,7 @@ class TorusVpnService @Inject constructor(
      * @return true if deletion was successful, false otherwise
      */
     suspend fun deletePeerFromServer(
-        serverConfig: TorusServerConfig,
+        serverConfig: ZKyNetServerConfig,
         peerId: String
     ): Boolean = withContext(Dispatchers.IO) {
         try {
@@ -310,7 +310,7 @@ class TorusVpnService @Inject constructor(
      */
     suspend fun cleanupOldConfig(
         oldConfigPath: String,
-        serverConfig: TorusServerConfig
+        serverConfig: ZKyNetServerConfig
     ): Boolean = withContext(Dispatchers.IO) {
         var success = true
         

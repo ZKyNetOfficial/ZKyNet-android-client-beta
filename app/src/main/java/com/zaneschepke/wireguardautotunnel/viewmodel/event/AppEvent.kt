@@ -4,7 +4,7 @@ import android.net.Uri
 import com.zaneschepke.networkmonitor.AndroidNetworkMonitor
 import com.zaneschepke.wireguardautotunnel.domain.enums.ConfigType
 import com.zaneschepke.wireguardautotunnel.domain.model.TunnelConf
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import com.zaneschepke.wireguardautotunnel.ui.state.AppViewState
 import com.zaneschepke.wireguardautotunnel.ui.theme.Theme
 import com.zaneschepke.wireguardautotunnel.util.StringValue
@@ -58,7 +58,7 @@ sealed class AppEvent {
 
     data class StopTunnel(val tunnel: TunnelConf) : AppEvent()
 
-    data class ConnectToTorusServer(val serverConfig: TorusServerConfig) : AppEvent()
+    data class ConnectToZKyNetServer(val serverConfig: ZKyNetServerConfig) : AppEvent()
     
     data object ReloadServerConfigs : AppEvent()
 

@@ -93,3 +93,5 @@ app/release/output.json
 android-os-req
 CLAUDE.md
 .claude/
+error.txt
+instructions.txt

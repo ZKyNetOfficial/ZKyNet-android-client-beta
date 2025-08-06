@@ -5,7 +5,7 @@ object Constants {
     const val TARGET_SDK = 35
     const val MIN_SDK = 26
     const val APP_ID = "com.zaneschepke.wireguardautotunnel"
-    const val APP_NAME = "wgtunnel"
+    const val APP_NAME = "zkynet"
 
     // build types
     const val RELEASE = "release"

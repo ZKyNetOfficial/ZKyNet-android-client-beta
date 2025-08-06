@@ -1,8 +1,8 @@
 /*
- * TORUS VPN - Custom VPN Client
- * Copyright (c) 2025 TheTorusProject
+ * ZKyNet VPN - Custom VPN Client
+ * Copyright (c) 2025 ZKyNet
  * 
- * This file is part of TORUS VPN, based on WG Tunnel by Zane Schepke.
+ * This file is part of ZKyNet VPN, based on WG Tunnel by Zane Schepke.
  * Original work Copyright (c) 2023-2025 Zane Schepke
  * Licensed under the MIT License.
  */
@@ -17,16 +17,16 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 
 /**
- * Component displaying a list of TORUS VPN servers with real configuration data.
+ * Component displaying a list of ZKyNet VPN servers with real configuration data.
  * Shows available server locations with connection capabilities.
  */
 @Composable
-fun TorusServerList(
-    servers: List<TorusServerConfig>,
-    onConnectToServer: (TorusServerConfig) -> Unit,
+fun ZKyNetServerList(
+    servers: List<ZKyNetServerConfig>,
+    onConnectToServer: (ZKyNetServerConfig) -> Unit,
     connectedServerId: String? = null,
     onCustomEndpointClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -37,7 +37,7 @@ fun TorusServerList(
     ) {
         item {
             Text(
-                text = "TORUS Servers",
+                text = "ZKyNet Servers",
                 style = MaterialTheme.typography.headlineMedium.copy(
                     fontWeight = FontWeight.Bold
                 ),
@@ -52,7 +52,7 @@ fun TorusServerList(
                 displayName = server.displayName,
                 location = server.location,
                 country = server.country,
-                serverType = if (server.isTestServer) ServerType.TORUS_TEST else ServerType.TORUS_REGULAR,
+                serverType = if (server.isTestServer) ServerType.ZKYNET_TEST else ServerType.ZKYNET_REGULAR,
                 connectionStatus = if (server.id == connectedServerId) ConnectionStatus.CONNECTED else ConnectionStatus.AVAILABLE
             )
             
@@ -80,4 +80,3 @@ fun TorusServerList(
         }
     }
 }
-

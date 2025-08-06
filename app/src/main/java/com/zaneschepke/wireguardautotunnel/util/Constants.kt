@@ -22,7 +22,7 @@ object Constants {
     const val VPN_SETTINGS_PACKAGE = "android.net.vpn.SETTINGS"
     const val SYSTEM_EXEMPT_SERVICE_TYPE_ID = 1024
 
-    const val DEFAULT_EXPORT_FILE_NAME = "wgtunnel-export.zip"
+    const val DEFAULT_EXPORT_FILE_NAME = "zkynet-export.zip"
 
     const val SUBSCRIPTION_TIMEOUT = 5_000L
 
@@ -39,5 +39,5 @@ object Constants {
     const val STANDALONE_FLAVOR = "standalone"
     const val RELEASE = "release"
 
-    const val BASE_RELEASE_URL = "https://github.com/wgtunnel/wgtunnel/releases/tag/"
+    const val BASE_RELEASE_URL = "https://github.com/ZKyNet/zkynet-android-client/releases/tag/"
 }

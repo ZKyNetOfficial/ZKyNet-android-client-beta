@@ -2,7 +2,7 @@ package com.zaneschepke.wireguardautotunnel.data.service
 
 import android.content.Context
 import android.util.Log
-import com.zaneschepke.wireguardautotunnel.data.model.TorusServerConfig
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
@@ -46,8 +46,8 @@ private data class ServerConfigJson(
     val connectionTimeoutMs: Long = 30000,
     val isEnabled: Boolean = true
 ) {
-    fun toTorusServerConfig(): TorusServerConfig {
-        return TorusServerConfig(
+    fun toZKyNetServerConfig(): ZKyNetServerConfig {
+        return ZKyNetServerConfig(
             id = id,
             displayName = displayName,
             location = location,
@@ -91,8 +91,8 @@ class DynamicServerConfigManager @Inject constructor(
     }
     
     // Backing properties for proper StateFlow patterns
-    private val _servers = MutableStateFlow<List<TorusServerConfig>>(emptyList())
-    val servers: StateFlow<List<TorusServerConfig>> = _servers.asStateFlow()
+    private val _servers = MutableStateFlow<List<ZKyNetServerConfig>>(emptyList())
+    val servers: StateFlow<List<ZKyNetServerConfig>> = _servers.asStateFlow()
     
     private val _isLoading = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
@@ -124,7 +124,7 @@ class DynamicServerConfigManager @Inject constructor(
     sealed class ConfigurationState {
         object Loading : ConfigurationState()
         object Empty : ConfigurationState()
-        data class Success(val servers: List<TorusServerConfig>) : ConfigurationState()
+        data class Success(val servers: List<ZKyNetServerConfig>) : ConfigurationState()
         data class Error(val message: String) : ConfigurationState()
     }
     
@@ -176,12 +176,12 @@ class DynamicServerConfigManager @Inject constructor(
                 Log.w(TAG, "Configuration file missing version information")
             }
             
-            // Convert to TorusServerConfig objects with validation
+            // Convert to ZKyNetServerConfig objects with validation
             val serverConfigs = configResponse.servers
                 .filter { it.isEnabled } // Only include enabled servers
                 .mapNotNull { serverJson ->
                     try {
-                        val config = serverJson.toTorusServerConfig()
+                        val config = serverJson.toZKyNetServerConfig()
                         if (validateServerConfig(config)) {
                             config
                         } else {
@@ -228,21 +228,21 @@ class DynamicServerConfigManager @Inject constructor(
     /**
      * Gets a server configuration by ID.
      */
-    fun getServerById(id: String): TorusServerConfig? {
+    fun getServerById(id: String): ZKyNetServerConfig? {
         return _servers.value.find { it.id == id }
     }
     
     /**
      * Gets the test server configuration.
      */
-    fun getTestServer(): TorusServerConfig? {
+    fun getTestServer(): ZKyNetServerConfig? {
         return _servers.value.find { it.isTestServer }
     }
     
     /**
      * Gets all available servers (enabled only).
      */
-    fun getAvailableServers(): List<TorusServerConfig> {
+    fun getAvailableServers(): List<ZKyNetServerConfig> {
         return _servers.value.filter { it.isEnabled }
     }
     
@@ -258,7 +258,7 @@ class DynamicServerConfigManager @Inject constructor(
     /**
      * Validates a server configuration.
      */
-    fun validateServerConfig(server: TorusServerConfig): Boolean {
+    fun validateServerConfig(server: ZKyNetServerConfig): Boolean {
         return server.id.isNotBlank() &&
                 server.displayName.isNotBlank() &&
                 server.apiUrl.isNotBlank() &&
