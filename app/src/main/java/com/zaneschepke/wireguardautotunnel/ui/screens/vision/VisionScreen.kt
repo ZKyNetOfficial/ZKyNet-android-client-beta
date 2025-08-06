@@ -12,8 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.zaneschepke.wireguardautotunnel.ui.screens.vision.components.DonationSection
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.zaneschepke.wireguardautotunnel.ui.screens.vision.components.SupportSection
 import com.zaneschepke.wireguardautotunnel.ui.screens.vision.components.VisionSection
+import com.zaneschepke.wireguardautotunnel.viewmodel.VisionViewModel
 
 /**
  * Vision screen displaying TORUS company mission and donation information.
@@ -21,7 +23,9 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.vision.components.VisionSe
  * along with options for users to support the project through donations.
  */
 @Composable
-fun VisionScreen() {
+fun VisionScreen(
+    viewModel: VisionViewModel = hiltViewModel()
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -56,7 +60,7 @@ fun VisionScreen() {
                     textAlign = TextAlign.Center
                 )
                 Text(
-                    text = "Building a safer, more private internet for everyone",
+                    text = "Turning the best privacy tools into a unified, user-friendly platform. Free to access, built to scale, and designed to reward the people who power it.",
                     style = MaterialTheme.typography.bodyLarge,
                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                     textAlign = TextAlign.Center,
@@ -68,7 +72,18 @@ fun VisionScreen() {
         // Vision Content Section
         VisionSection()
 
-        // Donation Section
-        DonationSection()
+        // Support Section
+        SupportSection(userSupportApi = viewModel.userSupportApi)
+        
+        // Thank You Text
+        Text(
+            text = "Thank you for being here. Your support, big or small, truly matters.",
+            style = MaterialTheme.typography.bodyMedium,
+            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+            textAlign = TextAlign.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = 8.dp)
+        )
     }
 }

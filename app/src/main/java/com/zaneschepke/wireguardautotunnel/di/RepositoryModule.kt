@@ -11,6 +11,8 @@ import com.zaneschepke.wireguardautotunnel.data.dao.TunnelConfigDao
 import com.zaneschepke.wireguardautotunnel.data.network.GitHubApi
 import com.zaneschepke.wireguardautotunnel.data.network.KtorClient
 import com.zaneschepke.wireguardautotunnel.data.network.KtorGitHubApi
+import com.zaneschepke.wireguardautotunnel.data.network.KtorUserSupportApi
+import com.zaneschepke.wireguardautotunnel.data.network.UserSupportApi
 import com.zaneschepke.wireguardautotunnel.data.repository.AppDataRoomRepository
 import com.zaneschepke.wireguardautotunnel.data.repository.DataStoreAppStateRepository
 import com.zaneschepke.wireguardautotunnel.data.repository.GitHubUpdateRepository
@@ -129,5 +131,14 @@ class RepositoryModule {
             context,
             ioDispatcher,
         )
+    }
+
+    @Provides
+    @Singleton
+    fun provideUserSupportApi(
+        client: HttpClient,
+        @ApplicationContext context: Context
+    ): UserSupportApi {
+        return KtorUserSupportApi(client, context)
     }
 }
