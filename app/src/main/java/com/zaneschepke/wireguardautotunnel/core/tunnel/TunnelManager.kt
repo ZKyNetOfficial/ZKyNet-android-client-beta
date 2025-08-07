@@ -27,11 +27,11 @@ import kotlinx.coroutines.plus
 class TunnelManager
 @Inject
 constructor(
-    @Kernel private val kernelTunnel: TunnelProvider,
-    @Userspace private val userspaceTunnel: TunnelProvider,
+    @param:Kernel private val kernelTunnel: TunnelProvider,
+    @param:Userspace private val userspaceTunnel: TunnelProvider,
     private val appDataRepository: AppDataRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : TunnelProvider {
 
     @OptIn(ExperimentalCoroutinesApi::class)

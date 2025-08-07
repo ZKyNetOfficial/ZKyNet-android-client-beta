@@ -29,7 +29,7 @@ import kotlinx.coroutines.launch
 class SplitTunnelViewModel
 @Inject
 constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     private val tunnelRepository: TunnelRepository,
     savedStateHandle: SavedStateHandle,
 ) : ViewModel() {

@@ -21,6 +21,7 @@ fun LearnMoreLinkLabel(onClick: (url: String) -> Unit, url: String) {
         }
         pop()
     }
+    @Suppress("DEPRECATION")
     ClickableText(
         text = gettingStarted,
         style =

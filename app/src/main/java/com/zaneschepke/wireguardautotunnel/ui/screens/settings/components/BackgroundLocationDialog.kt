@@ -34,6 +34,7 @@ fun BackgroundLocationDialog(show: Boolean, onDismiss: () -> Unit, onAttest: () 
             onAttest = { onDismiss() },
             title = { Text(text = stringResource(R.string.vpn_denied_dialog_title)) },
             body = {
+                @Suppress("DEPRECATION")
                 ClickableText(
                     text = alwaysOnDescription,
                     style =

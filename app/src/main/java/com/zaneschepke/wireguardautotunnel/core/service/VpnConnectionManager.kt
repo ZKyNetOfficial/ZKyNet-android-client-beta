@@ -39,7 +39,7 @@ class VpnConnectionManager @Inject constructor(
     private val zkynetVpnService: ZKyNetVpnService,
     private val configManager: DynamicServerConfigManager,
     private val appDataRepository: AppDataRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
 ) {
     
     companion object {

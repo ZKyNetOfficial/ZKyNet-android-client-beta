@@ -25,7 +25,7 @@ class ConfigViewModel
 @Inject
 constructor(
     private val tunnelRepository: TunnelRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(ConfigUiState())

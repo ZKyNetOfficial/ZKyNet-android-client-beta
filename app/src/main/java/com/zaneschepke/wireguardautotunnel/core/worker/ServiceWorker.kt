@@ -26,7 +26,7 @@ constructor(
     @Assisted private val params: WorkerParameters,
     private val serviceManager: ServiceManager,
     private val appDataRepository: AppDataRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     private val tunnelManager: TunnelManager,
 ) : CoroutineWorker(context, params) {
 

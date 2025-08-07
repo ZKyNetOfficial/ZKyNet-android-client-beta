@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class RoomSettingsRepository(
     private val settingsDoa: SettingsDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : AppSettingRepository {
 
     override suspend fun save(appSettings: AppSettings) {

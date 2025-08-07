@@ -8,7 +8,7 @@ sealed class StringValue {
 
     data object Empty : StringValue()
 
-    class StringResource(@StringRes val resId: Int, vararg val args: Any) : StringValue()
+    class StringResource(@param:StringRes val resId: Int, vararg val args: Any) : StringValue()
 
     fun asString(context: Context?): String {
         return when (this) {

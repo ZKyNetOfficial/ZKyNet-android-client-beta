@@ -29,9 +29,9 @@ class ServiceManager
 @Inject
 constructor(
     private val context: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @ApplicationScope private val applicationScope: CoroutineScope,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
+    @param:MainDispatcher private val mainDispatcher: CoroutineDispatcher,
     private val appDataRepository: AppDataRepository,
 ) {
 

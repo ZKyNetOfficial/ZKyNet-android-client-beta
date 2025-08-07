@@ -21,7 +21,7 @@ import com.zaneschepke.wireguardautotunnel.util.StringValue
 import dagger.hilt.android.qualifiers.ApplicationContext
 import javax.inject.Inject
 
-class WireGuardNotification @Inject constructor(@ApplicationContext override val context: Context) :
+class WireGuardNotification @Inject constructor(@param:ApplicationContext override val context: Context) :
     com.zaneschepke.wireguardautotunnel.core.notification.NotificationManager {
 
     enum class NotificationChannels {

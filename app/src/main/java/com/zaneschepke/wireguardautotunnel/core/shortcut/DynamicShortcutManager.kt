@@ -12,7 +12,7 @@ import kotlinx.coroutines.withContext
 
 class DynamicShortcutManager(
     private val context: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : ShortcutManager {
     override suspend fun addShortcuts() {
         withContext(ioDispatcher) {

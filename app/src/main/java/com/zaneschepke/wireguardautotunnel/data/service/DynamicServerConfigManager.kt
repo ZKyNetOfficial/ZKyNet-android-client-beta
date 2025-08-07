@@ -72,7 +72,7 @@ private data class ServerConfigJson(
  */
 @Singleton
 class DynamicServerConfigManager @Inject constructor(
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) {
     
     companion object {

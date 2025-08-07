@@ -22,7 +22,7 @@ import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 
 abstract class BaseTunnel(
-    @ApplicationScope private val applicationScope: CoroutineScope,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
     private val appDataRepository: AppDataRepository,
     private val serviceManager: ServiceManager,
 ) : TunnelProvider {

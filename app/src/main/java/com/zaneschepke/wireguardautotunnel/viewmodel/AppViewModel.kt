@@ -61,9 +61,9 @@ class AppViewModel
 @Inject
 constructor(
     val appDataRepository: AppDataRepository,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @MainDispatcher private val mainDispatcher: CoroutineDispatcher,
-    @AppShell private val rootShell: Provider<RootShell>,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:MainDispatcher private val mainDispatcher: CoroutineDispatcher,
+    @param:AppShell private val rootShell: Provider<RootShell>,
     val tunnelManager: TunnelManager,
     private val serviceManager: ServiceManager,
     private val logReader: LogReader,
@@ -100,9 +100,12 @@ constructor(
                 serviceManager.autoTunnelService.map { it != null },
                 networkMonitor.networkStatusFlow,
             ) { array ->
+                @Suppress("UNCHECKED_CAST")
                 val settings = array[0] as AppSettings
+                @Suppress("UNCHECKED_CAST")
                 val tunnels = array[1] as List<TunnelConf>
                 val appState = array[2] as AppState
+                @Suppress("UNCHECKED_CAST")
                 val activeTunnels = array[3] as Map<TunnelConf, TunnelState>
                 val autoTunnel = array[4] as Boolean
                 val network = array[5] as NetworkStatus

@@ -85,7 +85,7 @@ fun CustomTextField(
             interactionSource = interactionSource,
             placeholder = placeholder,
             container = {
-                OutlinedTextFieldDefaults.ContainerBox(
+                OutlinedTextFieldDefaults.Container(
                     enabled,
                     isError = isError,
                     interactionSource,

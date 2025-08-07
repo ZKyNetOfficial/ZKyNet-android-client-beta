@@ -33,12 +33,12 @@ fun VpnDeniedDialog(show: Boolean, onDismiss: () -> Unit) {
             onAttest = { onDismiss() },
             title = { Text(text = stringResource(R.string.vpn_denied_dialog_title)) },
             body = {
+                @Suppress("DEPRECATION")
                 ClickableText(
                     text = alwaysOnDescription,
-                    style =
-                        MaterialTheme.typography.bodyMedium.copy(
-                            color = MaterialTheme.colorScheme.outline
-                        ),
+                    style = MaterialTheme.typography.bodyMedium.copy(
+                        color = MaterialTheme.colorScheme.outline
+                    ),
                 ) {
                     alwaysOnDescription
                         .getStringAnnotations(tag = "vpnSettings", it, it)

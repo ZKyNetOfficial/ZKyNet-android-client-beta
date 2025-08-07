@@ -246,5 +246,6 @@ fun Activity.disableImmersiveMode() {
     WindowCompat.setDecorFitsSystemWindows(window, true)
     val controller = WindowCompat.getInsetsController(window, window.decorView)
     controller.show(WindowInsetsCompat.Type.systemBars())
+    @Suppress("DEPRECATION")
     window.statusBarColor = android.graphics.Color.TRANSPARENT
 }

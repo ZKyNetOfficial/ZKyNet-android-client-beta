@@ -13,7 +13,7 @@ import kotlinx.coroutines.withContext
 
 class RoomTunnelRepository(
     private val tunnelConfigDao: TunnelConfigDao,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : TunnelRepository {
 
     override val flow =

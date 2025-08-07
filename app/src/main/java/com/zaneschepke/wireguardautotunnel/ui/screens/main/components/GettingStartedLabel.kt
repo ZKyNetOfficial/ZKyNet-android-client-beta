@@ -42,14 +42,14 @@ fun GettingStartedLabel(onClick: (url: String) -> Unit) {
             append(".")
         }
         Text(text = stringResource(R.string.no_tunnels), fontStyle = FontStyle.Italic)
+        @Suppress("DEPRECATION")
         ClickableText(
             modifier = Modifier.padding(vertical = 10.dp, horizontal = 24.dp),
             text = gettingStarted,
-            style =
-                MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    textAlign = TextAlign.Center,
-                ),
+            style = MaterialTheme.typography.bodyMedium.copy(
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                textAlign = TextAlign.Center,
+            ),
         ) {
             gettingStarted
                 .getStringAnnotations(tag = "gettingStarted", it, it)

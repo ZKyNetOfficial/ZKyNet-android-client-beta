@@ -23,7 +23,7 @@ import timber.log.Timber
 class UserspaceTunnel
 @Inject
 constructor(
-    @ApplicationScope private val applicationScope: CoroutineScope,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
     val serviceManager: ServiceManager,
     val appDataRepository: AppDataRepository,
     private val backend: Backend,

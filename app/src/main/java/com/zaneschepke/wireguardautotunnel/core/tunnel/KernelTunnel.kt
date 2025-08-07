@@ -19,7 +19,7 @@ import timber.log.Timber
 class KernelTunnel
 @Inject
 constructor(
-    @ApplicationScope private val applicationScope: CoroutineScope,
+    @param:ApplicationScope private val applicationScope: CoroutineScope,
     serviceManager: ServiceManager,
     appDataRepository: AppDataRepository,
     private val backend: Backend,

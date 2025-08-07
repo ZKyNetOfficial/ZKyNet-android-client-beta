@@ -27,7 +27,7 @@ class GitHubUpdateRepository(
     private val githubOwner: String,
     private val githubRepo: String,
     private val context: Context,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
+    @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher,
 ) : UpdateRepository {
     override suspend fun checkForUpdate(currentVersion: String): Result<AppUpdate?> =
         withContext(ioDispatcher) {
