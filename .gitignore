@@ -95,3 +95,4 @@ CLAUDE.md
 .claude/
 error.txt
 instructions.txt
+tmp\ Documentation/

@@ -11,16 +11,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.zaneschepke.wireguardautotunnel.R
+import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.GlobalBottomSheet
 import com.zaneschepke.wireguardautotunnel.ui.navigation.LocalIsAndroidTV
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TunnelImportSheet(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     onFileClick: () -> Unit,
     onQrClick: () -> Unit,
@@ -31,19 +31,11 @@ fun TunnelImportSheet(
     val isTv = LocalIsAndroidTV.current
     var showHelp by remember { mutableStateOf(false) }
 
-    val sheetState = rememberModalBottomSheetState()
-
-    val context = LocalContext.current
-    ModalBottomSheet(
-        containerColor = MaterialTheme.colorScheme.surface,
-        onDismissRequest = { onDismiss() },
-        sheetState = sheetState,
+    GlobalBottomSheet(
+        isVisible = isVisible,
+        onDismiss = onDismiss,
+        skipPartiallyExpanded = true
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(bottom = 16.dp)
-        ) {
             // Header with help toggle
             Row(
                 modifier = Modifier
@@ -86,7 +78,6 @@ fun TunnelImportSheet(
                     onUrlClick = onUrlClick
                 )
             }
-        }
     }
 }
 

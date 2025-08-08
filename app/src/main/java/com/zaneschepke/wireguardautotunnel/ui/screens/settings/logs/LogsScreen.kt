@@ -25,6 +25,7 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.settings.logs.components.L
 import com.zaneschepke.wireguardautotunnel.ui.screens.settings.logs.components.LogsBottomSheet
 import com.zaneschepke.wireguardautotunnel.ui.state.AppViewState
 import com.zaneschepke.wireguardautotunnel.viewmodel.AppViewModel
+import com.zaneschepke.wireguardautotunnel.viewmodel.event.AppEvent
 
 @Composable
 fun LogsScreen(appViewState: AppViewState, viewModel: AppViewModel) {
@@ -67,7 +68,11 @@ fun LogsScreen(appViewState: AppViewState, viewModel: AppViewModel) {
 
     when (appViewState.bottomSheet) {
         AppViewState.BottomSheet.LOGS -> {
-            LogsBottomSheet(viewModel)
+            LogsBottomSheet(
+                isVisible = true,
+                onDismiss = { viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.NONE)) },
+                viewModel = viewModel
+            )
         }
         else -> Unit
     }

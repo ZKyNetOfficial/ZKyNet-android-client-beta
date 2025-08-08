@@ -22,14 +22,14 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zaneschepke.wireguardautotunnel.data.network.UserSupportApi
+import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.rememberBottomSheetState
+import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.BottomSheetType
 
 @Composable
 fun SupportSection(
     userSupportApi: UserSupportApi
 ) {
-    var showDonateSheet by remember { mutableStateOf(false) }
-    var showBackVisionSheet by remember { mutableStateOf(false) }
-    var showNodeOperatorSheet by remember { mutableStateOf(false) }
+    val bottomSheetState = rememberBottomSheetState()
     val uriHandler = LocalUriHandler.current
 
     Card(
@@ -73,7 +73,7 @@ fun SupportSection(
             ) {
                 // Donate Button
                 Button(
-                    onClick = { showDonateSheet = true },
+                    onClick = { bottomSheetState.show(BottomSheetType.Donate) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -90,7 +90,7 @@ fun SupportSection(
                 
                 // Back the Vision Button
                 Button(
-                    onClick = { showBackVisionSheet = true },
+                    onClick = { bottomSheetState.show(BottomSheetType.BackVision) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.tertiary
@@ -107,7 +107,7 @@ fun SupportSection(
                 
                 // Node Operator Interest Button
                 Button(
-                    onClick = { showNodeOperatorSheet = true },
+                    onClick = { bottomSheetState.show(BottomSheetType.NodeOperator) },
                     modifier = Modifier.fillMaxWidth(),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.primary
@@ -176,21 +176,20 @@ fun SupportSection(
     }
     
     // Bottom Sheets
-    if (showDonateSheet) {
-        DonateBottomSheet(onDismiss = { showDonateSheet = false })
-    }
+    DonateBottomSheet(
+        isVisible = bottomSheetState.isShowing<BottomSheetType.Donate>(),
+        onDismiss = { bottomSheetState.hide() }
+    )
     
-    if (showBackVisionSheet) {
-        BackVisionBottomSheet(
-            onDismiss = { showBackVisionSheet = false },
-            userSupportApi = userSupportApi
-        )
-    }
+    BackVisionBottomSheet(
+        isVisible = bottomSheetState.isShowing<BottomSheetType.BackVision>(),
+        onDismiss = { bottomSheetState.hide() },
+        userSupportApi = userSupportApi
+    )
     
-    if (showNodeOperatorSheet) {
-        NodeOperatorBottomSheet(
-            onDismiss = { showNodeOperatorSheet = false },
-            userSupportApi = userSupportApi
-        )
-    }
+    NodeOperatorBottomSheet(
+        isVisible = bottomSheetState.isShowing<BottomSheetType.NodeOperator>(),
+        onDismiss = { bottomSheetState.hide() },
+        userSupportApi = userSupportApi
+    )
 }

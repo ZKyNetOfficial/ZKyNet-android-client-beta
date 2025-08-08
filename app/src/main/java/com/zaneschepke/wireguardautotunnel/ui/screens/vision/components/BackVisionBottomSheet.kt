@@ -21,15 +21,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.zaneschepke.wireguardautotunnel.data.network.UserSupportApi
+import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.GlobalBottomSheet
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BackVisionBottomSheet(
+    isVisible: Boolean,
     onDismiss: () -> Unit,
     userSupportApi: UserSupportApi
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val scope = rememberCoroutineScope()
     
     var email by remember { mutableStateOf("") }
@@ -38,18 +38,10 @@ fun BackVisionBottomSheet(
     var emailSubmitted by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
 
-    ModalBottomSheet(
-        containerColor = MaterialTheme.colorScheme.surface,
-        onDismissRequest = onDismiss,
-        sheetState = sheetState
+    GlobalBottomSheet(
+        isVisible = isVisible,
+        onDismiss = onDismiss
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(16.dp)
-        ) {
             Text(
                 text = "🔥",
                 style = MaterialTheme.typography.displayMedium
@@ -242,8 +234,5 @@ fun BackVisionBottomSheet(
                     )
                 }
             }
-            
-            Spacer(modifier = Modifier.height(16.dp))
-        }
     }
 }

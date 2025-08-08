@@ -89,10 +89,15 @@ fun MainScreen(appUiState: AppUiState, appViewState: AppViewState, viewModel: Ap
 
     when (appViewState.bottomSheet) {
         AppViewState.BottomSheet.EXPORT_TUNNELS -> {
-            ExportTunnelsBottomSheet(viewModel)
+            ExportTunnelsBottomSheet(
+                isVisible = true,
+                onDismiss = { viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.NONE)) },
+                viewModel = viewModel
+            )
         }
         AppViewState.BottomSheet.IMPORT_TUNNELS -> {
             TunnelImportSheet(
+                isVisible = true,
                 onDismiss = {
                     viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.NONE))
                 },

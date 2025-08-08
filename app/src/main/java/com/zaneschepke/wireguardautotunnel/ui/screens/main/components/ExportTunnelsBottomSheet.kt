@@ -6,11 +6,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.FolderZip
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -24,6 +22,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.domain.enums.ConfigType
+import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.GlobalBottomSheet
 import com.zaneschepke.wireguardautotunnel.ui.common.functions.rememberFileExportLauncherForResult
 import com.zaneschepke.wireguardautotunnel.ui.navigation.LocalIsAndroidTV
 import com.zaneschepke.wireguardautotunnel.ui.screens.settings.components.AuthorizationPromptWrapper
@@ -33,9 +32,12 @@ import com.zaneschepke.wireguardautotunnel.util.extensions.hasSAFSupport
 import com.zaneschepke.wireguardautotunnel.viewmodel.AppViewModel
 import com.zaneschepke.wireguardautotunnel.viewmodel.event.AppEvent
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExportTunnelsBottomSheet(viewModel: AppViewModel) {
+fun ExportTunnelsBottomSheet(
+    isVisible: Boolean,
+    onDismiss: () -> Unit,
+    viewModel: AppViewModel
+) {
     val context = LocalContext.current
     val isTv = LocalIsAndroidTV.current
 
@@ -52,7 +54,7 @@ fun ExportTunnelsBottomSheet(viewModel: AppViewModel) {
                     viewModel.handleEvent(AppEvent.ExportSelectedTunnels(exportConfigType, file))
                 } else {
                     viewModel.handleEvent(AppEvent.ClearSelectedTunnels)
-                    viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.NONE))
+                    onDismiss()
                 }
             },
         )
@@ -84,11 +86,10 @@ fun ExportTunnelsBottomSheet(viewModel: AppViewModel) {
         )
     }
 
-    ModalBottomSheet(
-        containerColor = MaterialTheme.colorScheme.surface,
-        onDismissRequest = {
-            viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.NONE))
-        },
+    GlobalBottomSheet(
+        isVisible = isVisible,
+        onDismiss = onDismiss,
+        skipPartiallyExpanded = true
     ) {
         ExportOptionRow(
             label = stringResource(R.string.export_tunnels_amnezia),
