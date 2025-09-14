@@ -33,7 +33,6 @@ private data class DefaultRetryPolicy(
 
 @Serializable
 private data class ServerConfigJson(
-    val id: String,
     val displayName: String,
     val location: String,
     val country: String,
@@ -47,8 +46,11 @@ private data class ServerConfigJson(
     val isEnabled: Boolean = true
 ) {
     fun toZKyNetServerConfig(): ZKyNetServerConfig {
+        // Generate ID from apiUrl + displayName hash for internal identification
+        val generatedId = "${apiUrl}#${displayName}".hashCode().toString()
+        
         return ZKyNetServerConfig(
-            id = id,
+            id = generatedId,
             displayName = displayName,
             location = location,
             country = country,
@@ -60,19 +62,21 @@ private data class ServerConfigJson(
             retryAttempts = retryAttempts,
             retryDelayMs = retryDelayMs,
             connectionTimeoutMs = connectionTimeoutMs,
-            isEnabled = isEnabled
+            isEnabled = isEnabled,
+            peerUuid = null, // Will be populated from storage
+            lastConfigUpdate = null // Will be populated from storage
         )
     }
 }
 
 /**
  * Manages dynamic server configurations loaded from JSON files.
- * Replaces the hardcoded TorusServersConfig with a flexible,
- * file-based configuration system that supports hot-reloading.
+ * Handles UUID-based peer management and configuration validation.
  */
 @Singleton
 class DynamicServerConfigManager @Inject constructor(
-    @param:ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context,
+    private val peerIdManager: PeerIdManager
 ) {
     
     companion object {
@@ -183,13 +187,14 @@ class DynamicServerConfigManager @Inject constructor(
                     try {
                         val config = serverJson.toZKyNetServerConfig()
                         if (validateServerConfig(config)) {
-                            config
+                            // Enrich with stored peer information
+                            peerIdManager.enrichServerConfigWithPeerInfo(config)
                         } else {
-                            Log.w(TAG, "Invalid server configuration: ${serverJson.id}")
+                            Log.w(TAG, "Invalid server configuration: ${serverJson.displayName}")
                             null
                         }
                     } catch (e: Exception) {
-                        Log.e(TAG, "Error converting server config: ${serverJson.id}", e)
+                        Log.e(TAG, "Error converting server config: ${serverJson.displayName}", e)
                         null
                     }
                 }
@@ -259,8 +264,7 @@ class DynamicServerConfigManager @Inject constructor(
      * Validates a server configuration.
      */
     fun validateServerConfig(server: ZKyNetServerConfig): Boolean {
-        return server.id.isNotBlank() &&
-                server.displayName.isNotBlank() &&
+        return server.displayName.isNotBlank() &&
                 server.apiUrl.isNotBlank() &&
                 server.token.isNotBlank() &&
                 server.retryAttempts > 0 &&

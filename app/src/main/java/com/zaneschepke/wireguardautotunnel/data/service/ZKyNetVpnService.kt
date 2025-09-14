@@ -10,33 +10,41 @@
 package com.zaneschepke.wireguardautotunnel.data.service
 
 import android.content.Context
-import android.util.Log
 import dagger.hilt.android.qualifiers.ApplicationContext
 import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
+import timber.log.Timber
 import java.io.File
 import java.io.IOException
 import javax.inject.Inject
 import javax.inject.Singleton
 
 /**
- * Service class for managing ZKyNet VPN server connections.
- * Handles config file management, API downloading, and local storage operations.
+ * Service class for managing ZKyNet VPN server connections using UUID-based API.
+ * Handles peer creation, verification, config downloads, and cleanup operations.
  */
 @Singleton
 class ZKyNetVpnService @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    private val httpClient: OkHttpClient
+    private val httpClient: OkHttpClient,
+    private val peerIdManager: PeerIdManager
 ) {
     
     companion object {
         private const val TAG = "ZKyNetVpnService"
         private const val CONFIG_FILE_EXTENSION = ".conf"
+        private const val JSON_MEDIA_TYPE = "application/json; charset=utf-8"
     }
+    
+    private val json = Json { ignoreUnknownKeys = true }
     
     // Use internal app storage directory that doesn't require permissions
     private val configDirectory: File
@@ -45,140 +53,226 @@ class ZKyNetVpnService @Inject constructor(
         }
     
     /**
-     * Retrieves a WireGuard configuration for the specified server.
-     * First checks for existing local file, then downloads from API if needed.
+     * API response models for UUID-based peer management
+     */
+    @Serializable
+    data class CreatePeerRequest(
+        val peer_id: String? = null,
+        val ttl_hours: Int = 168
+    )
+    
+    @Serializable
+    data class CreatePeerResponse(
+        val internal_id: String,
+        val assigned_ip: String,
+        val created_at: String,
+        val expires_at: String,
+        val is_active: Boolean,
+        val status: String,
+        val ttl_hours: Double
+    )
+    
+    @Serializable
+    data class VerifyPeerResponse(
+        val assigned_ip: String? = null,
+        val created_at: String? = null,
+        val expires_at: String? = null,
+        val status: String
+    )
+    
+    /**
+     * Downloads a fresh configuration with new UUID from server.
+     * Used by ConfigValidationService when local config is invalid or missing.
      * 
      * @param serverConfig The server configuration to connect to
      * @return The file path of the configuration file, or null if failed
      */
-    suspend fun getServerConfig(serverConfig: ZKyNetServerConfig): String? = withContext(Dispatchers.IO) {
-        Log.i(TAG, "Starting config retrieval for server: ${serverConfig.id}")
-        
-        // All servers now download configs from their respective API endpoints
-        Log.i(TAG, "Processing server: ${serverConfig.displayName} via API: ${serverConfig.apiUrl}")
-        
-        // Check for existing config file first
-        val configFileName = "${serverConfig.displayName.lowercase().replace(" ", "")}.conf"
-        val existingConfigPath = checkForExistingConfig(configFileName)
-        
-        if (existingConfigPath != null) {
-            Log.i(TAG, "Found existing config file: $existingConfigPath")
-            return@withContext existingConfigPath
-        }
-        
-        // Download new config from API
-        Log.i(TAG, "No existing config found, downloading from API")
-        return@withContext downloadConfigFromApi(serverConfig, configFileName)
-    }
-    
-    
-    /**
-     * Checks if a WireGuard configuration file already exists locally.
-     * 
-     * @param fileName The base filename to check for
-     * @return The full path of the existing file, or null if not found
-     */
-    private fun checkForExistingConfig(fileName: String): String? {
-        Log.i(TAG, "Checking for existing config file: $fileName")
-        
-        val configFile = File(configDirectory, fileName)
-        
-        return if (configFile.exists() && configFile.isFile) {
-            Log.i(TAG, "Existing config file found: ${configFile.absolutePath}")
-            configFile.absolutePath
-        } else {
-            Log.i(TAG, "No existing config file found for: $fileName")
-            null
-        }
-    }
-    
-    /**
-     * Downloads WireGuard configuration from the server API using single auto-creation endpoint.
-     * Uses GET /api/peer/{peer_id}/config which automatically creates the peer if it doesn't exist.
-     * This is the recommended approach from the backend API documentation.
-     * 
-     * @param serverConfig The server configuration containing API details
-     * @param baseFileName The base filename for saving the config
-     * @return The full path of the saved config file, or null if failed
-     */
-    private suspend fun downloadConfigFromApi(
-        serverConfig: ZKyNetServerConfig,
-        baseFileName: String
-    ): String? = withContext(Dispatchers.IO) {
-        
+    suspend fun downloadFreshConfig(serverConfig: ZKyNetServerConfig): String? = withContext(Dispatchers.IO) {
         try {
-            Log.i(TAG, "Starting single-call config download with auto-creation for: ${serverConfig.displayName}")
+            Timber.i("Downloading fresh config for server: ${serverConfig.displayName}")
             
-            // Generate consistent peer ID for this device/server combination
-            val peerId = "android-${serverConfig.id}-user"
-            
-            Log.i(TAG, "Using peer ID: $peerId for server: ${serverConfig.apiUrl}")
-            
-            // Single API call that auto-creates peer and returns config
-            val configContent = downloadConfigWithAutoCreation(serverConfig, peerId)
-            if (configContent == null) {
-                Log.e(TAG, "Failed to download/create config for peer: $peerId")
+            // Step 1: Create new peer and get UUID from server
+            val peerResponse = createPeer(serverConfig)
+            if (peerResponse == null) {
+                Timber.e("Failed to create peer for server: ${serverConfig.displayName}")
                 return@withContext null
             }
             
-            Log.i(TAG, "Successfully downloaded config for peer: $peerId")
+            Timber.i("Created peer with UUID: ${peerResponse.internal_id} for ${serverConfig.displayName}")
             
-            // Save config to local storage
-            return@withContext saveConfigToStorage(configContent, baseFileName)
+            // Step 2: Download config using the new UUID
+            val configContent = downloadConfigByUuid(serverConfig, peerResponse.internal_id)
+            if (configContent == null) {
+                Timber.e("Failed to download config for UUID: ${peerResponse.internal_id}")
+                return@withContext null
+            }
             
-        } catch (e: IOException) {
-            Log.e(TAG, "Network error while downloading config", e)
-            return@withContext null
+            // Step 3: Save config to local storage with UUID as filename
+            val configPath = saveConfigToStorage(configContent, "${peerResponse.internal_id}.conf")
+            if (configPath == null) {
+                Timber.e("Failed to save config for UUID: ${peerResponse.internal_id}")
+                return@withContext null
+            }
+            
+            // Step 4: Store peer information for future use
+            val timestamp = System.currentTimeMillis()
+            peerIdManager.storePeerUuid(serverConfig, peerResponse.internal_id)
+            peerIdManager.storeConfigPath(serverConfig, configPath)
+            
+            Timber.i("Successfully downloaded and stored fresh config for ${serverConfig.displayName}")
+            return@withContext configPath
+            
         } catch (e: Exception) {
-            Log.e(TAG, "Unexpected error while downloading config", e)
+            Timber.e(e, "Error downloading fresh config for ${serverConfig.displayName}")
             return@withContext null
         }
     }
     
     /**
-     * Downloads configuration using the auto-creation endpoint.
-     * Single API call that creates the peer if it doesn't exist and returns the config.
-     * This matches the recommended backend integration pattern.
+     * Verifies if a peer UUID is still valid on the server.
+     * Used by ConfigValidationService to check stored UUIDs.
      * 
      * @param serverConfig The server configuration
-     * @param peerId The peer ID to use (creates if doesn't exist)
-     * @return The config content if successful, null otherwise
+     * @param uuid The peer UUID to verify
+     * @return true if valid, false otherwise
      */
-    private suspend fun downloadConfigWithAutoCreation(
-        serverConfig: ZKyNetServerConfig, 
-        peerId: String
-    ): String? = withContext(Dispatchers.IO) {
+    suspend fun verifyPeerUuid(serverConfig: ZKyNetServerConfig, uuid: String): Boolean = withContext(Dispatchers.IO) {
         try {
-            Log.i(TAG, "Downloading config with auto-creation for peer: $peerId")
+            Timber.d("Verifying peer UUID: $uuid for server: ${serverConfig.displayName}")
             
-            // Build API request for auto-creation config download
             val request = Request.Builder()
-                .url("${serverConfig.apiUrl}/api/peer/$peerId/config")
+                .url("${serverConfig.apiUrl}/peers/$uuid/verify")
                 .addHeader("Authorization", "Bearer ${serverConfig.token}")
                 .get()
                 .build()
             
-            // Execute HTTP request
             val response: Response = httpClient.newCall(request).execute()
             
             if (!response.isSuccessful) {
-                Log.e(TAG, "Config auto-creation failed with code: ${response.code} - ${response.message}")
+                if (response.code == 404) {
+                    Timber.w("📍 Peer UUID not found on server: $uuid (expected for deleted peers)")
+                    return@withContext false
+                } else {
+                    val errorBody = response.body?.string()
+                    Timber.w("🚨 Peer verification failed for $uuid")
+                    Timber.w("HTTP ${response.code}: ${response.message}")
+                    Timber.w("Response body: $errorBody")
+                    return@withContext false
+                }
+            }
+            
+            val responseBody = response.body?.string()
+            if (responseBody.isNullOrBlank()) {
+                Timber.e("Empty response from peer verification")
+                return@withContext false
+            }
+            
+            val verifyResponse = json.decodeFromString<VerifyPeerResponse>(responseBody)
+            val isValid = verifyResponse.status == "active"
+            
+            Timber.i("Peer UUID verification result: $isValid for $uuid (status: ${verifyResponse.status})")
+            return@withContext isValid
+            
+        } catch (e: Exception) {
+            Timber.e(e, "Error verifying peer UUID: $uuid")
+            return@withContext false
+        }
+    }
+    
+    /**
+     * Creates a new peer on the server using POST /peers API.
+     * Server generates and returns a UUID for the peer.
+     * 
+     * @param serverConfig The server configuration
+     * @return CreatePeerResponse with UUID and peer info, or null if failed
+     */
+    private suspend fun createPeer(serverConfig: ZKyNetServerConfig): CreatePeerResponse? = withContext(Dispatchers.IO) {
+        try {
+            Timber.d("Creating new peer for server: ${serverConfig.displayName}")
+            
+            // Create request with descriptive peer ID
+            val createRequest = CreatePeerRequest(
+                peer_id = "ZKyNet-${serverConfig.displayName}-${System.currentTimeMillis()}",
+                ttl_hours = 168
+            )
+            
+            val requestBody = json.encodeToString(CreatePeerRequest.serializer(), createRequest)
+                .toRequestBody(JSON_MEDIA_TYPE.toMediaType())
+            
+            val request = Request.Builder()
+                .url("${serverConfig.apiUrl}/peers")
+                .addHeader("Authorization", "Bearer ${serverConfig.token}")
+                .post(requestBody)
+                .build()
+            
+            val response: Response = httpClient.newCall(request).execute()
+            
+            if (!response.isSuccessful) {
                 val errorBody = response.body?.string()
-                Log.e(TAG, "Error response: $errorBody")
+                Timber.e("🚨 Peer creation failed for ${serverConfig.displayName}")
+                Timber.e("HTTP ${response.code}: ${response.message}")
+                Timber.e("Response body: $errorBody")
+                return@withContext null
+            }
+            
+            val responseBody = response.body?.string()
+            if (responseBody.isNullOrBlank()) {
+                Timber.e("Empty response from peer creation")
+                return@withContext null
+            }
+            
+            val createResponse = json.decodeFromString<CreatePeerResponse>(responseBody)
+            Timber.i("Successfully created peer with UUID: ${createResponse.internal_id}")
+            
+            return@withContext createResponse
+            
+        } catch (e: Exception) {
+            Timber.e(e, "Error creating peer for server: ${serverConfig.displayName}")
+            return@withContext null
+        }
+    }
+    
+    /**
+     * Downloads configuration file using UUID from GET /peers/{uuid}/config API.
+     * 
+     * @param serverConfig The server configuration
+     * @param uuid The peer UUID to download config for
+     * @return The config content if successful, null otherwise
+     */
+    private suspend fun downloadConfigByUuid(
+        serverConfig: ZKyNetServerConfig, 
+        uuid: String
+    ): String? = withContext(Dispatchers.IO) {
+        try {
+            Timber.d("Downloading config for UUID: $uuid")
+            
+            val request = Request.Builder()
+                .url("${serverConfig.apiUrl}/peers/$uuid/config")
+                .addHeader("Authorization", "Bearer ${serverConfig.token}")
+                .get()
+                .build()
+            
+            val response: Response = httpClient.newCall(request).execute()
+            
+            if (!response.isSuccessful) {
+                val errorBody = response.body?.string()
+                Timber.e("🚨 Config download failed for UUID: $uuid")
+                Timber.e("HTTP ${response.code}: ${response.message}")
+                Timber.e("Response body: $errorBody")
                 return@withContext null
             }
             
             val configContent = response.body?.string()
             if (configContent.isNullOrBlank()) {
-                Log.e(TAG, "Received empty config content")
+                Timber.e("Received empty config content")
                 return@withContext null
             }
             
-            Log.i(TAG, "Successfully downloaded config with auto-creation (${configContent.length} characters)")
+            Timber.i("Successfully downloaded config (${configContent.length} characters)")
             return@withContext configContent
             
         } catch (e: Exception) {
-            Log.e(TAG, "Error downloading config with auto-creation", e)
+            Timber.e(e, "Error downloading config for UUID: $uuid")
             return@withContext null
         }
     }
@@ -193,7 +287,7 @@ class ZKyNetVpnService @Inject constructor(
      */
     private fun saveConfigToStorage(configContent: String, baseFileName: String): String? {
         try {
-            Log.i(TAG, "Saving config content to internal storage")
+            Timber.i("Saving config content to internal storage")
             
             // Find available filename to handle conflicts
             val finalFileName = findAvailableFileName(baseFileName)
@@ -202,14 +296,14 @@ class ZKyNetVpnService @Inject constructor(
             // Write config content to file
             configFile.writeText(configContent)
             
-            Log.i(TAG, "Config file saved successfully: ${configFile.absolutePath}")
+            Timber.i("Config file saved successfully: ${configFile.absolutePath}")
             return configFile.absolutePath
             
         } catch (e: IOException) {
-            Log.e(TAG, "Failed to save config file", e)
+            Timber.e(e, "Failed to save config file")
             return null
         } catch (e: SecurityException) {
-            Log.e(TAG, "Permission denied when saving config file", e)
+            Timber.e(e, "Permission denied when saving config file")
             return null
         }
     }
@@ -222,7 +316,7 @@ class ZKyNetVpnService @Inject constructor(
      * @return An available filename that doesn't conflict with existing files
      */
     private fun findAvailableFileName(baseFileName: String): String {
-        Log.i(TAG, "Finding available filename for: $baseFileName")
+        Timber.i("Finding available filename for: $baseFileName")
         
         val nameWithoutExtension = baseFileName.substringBeforeLast(".")
         val extension = baseFileName.substringAfterLast(".", "")
@@ -240,7 +334,7 @@ class ZKyNetVpnService @Inject constructor(
         }
         
         if (counter > 0) {
-            Log.i(TAG, "Filename conflict resolved. Using: $candidateFileName")
+            Timber.i("Filename conflict resolved. Using: $candidateFileName")
         }
         
         return candidateFileName
@@ -256,87 +350,94 @@ class ZKyNetVpnService @Inject constructor(
             // Basic validation - check for required sections
             configContent.contains("[Interface]") && configContent.contains("[Peer]")
         } catch (e: Exception) {
-            Log.e(TAG, "Error validating config file: $filePath", e)
+            Timber.e(e, "Error validating config file: $filePath")
             false
         }
     }
     
     /**
-     * Deletes a peer configuration from the server remotely.
-     * This implements the cleanup requirement: "Send an API call to the server to delete the old config remotely"
+     * Deletes a peer from the server using UUID.
+     * Uses DELETE /peers/{uuid} API endpoint.
      * 
      * @param serverConfig The server configuration containing API details
-     * @param peerId The peer ID to delete from the server
+     * @param uuid The peer UUID to delete from the server
      * @return true if deletion was successful, false otherwise
      */
-    suspend fun deletePeerFromServer(
+    suspend fun deletePeerByUuid(
         serverConfig: ZKyNetServerConfig,
-        peerId: String
+        uuid: String
     ): Boolean = withContext(Dispatchers.IO) {
         try {
-            Log.i(TAG, "Deleting peer $peerId from server: ${serverConfig.displayName}")
+            Timber.i("Deleting peer $uuid from server: ${serverConfig.displayName}")
             
-            // Build DELETE API request for peer removal
             val request = Request.Builder()
-                .url("${serverConfig.apiUrl}/api/peer/$peerId")
+                .url("${serverConfig.apiUrl}/peers/$uuid")
                 .addHeader("Authorization", "Bearer ${serverConfig.token}")
                 .delete()
                 .build()
             
-            // Execute HTTP request
             val response: Response = httpClient.newCall(request).execute()
             
             if (!response.isSuccessful) {
-                Log.w(TAG, "Peer deletion failed with code: ${response.code} - ${response.message}")
-                // Log but don't fail - this is cleanup, not critical
-                return@withContext false
+                if (response.code == 404) {
+                    Timber.w("Peer UUID not found on server (already deleted): $uuid")
+                    return@withContext true // Consider this success
+                } else {
+                    Timber.w("Peer deletion failed with code: ${response.code} - ${response.message}")
+                    return@withContext false
+                }
             }
             
-            Log.i(TAG, "Successfully deleted peer $peerId from server")
+            Timber.i("Successfully deleted peer $uuid from server")
             return@withContext true
             
         } catch (e: Exception) {
-            Log.w(TAG, "Error deleting peer from server (non-critical)", e)
+            Timber.w(e, "Error deleting peer from server (non-critical): $uuid")
             return@withContext false
         }
     }
     
     /**
-     * Deletes old configuration files and cleans up remote peer.
-     * Implements the full cleanup requirement from instructions.txt
+     * Cleans up all data for a server configuration.
+     * Deletes local config files and removes peer from server.
      * 
-     * @param oldConfigPath Path to the local config file to delete
-     * @param serverConfig Server configuration for remote cleanup
+     * @param serverConfig Server configuration to clean up
+     * @return true if cleanup was successful
      */
-    suspend fun cleanupOldConfig(
-        oldConfigPath: String,
-        serverConfig: ZKyNetServerConfig
-    ): Boolean = withContext(Dispatchers.IO) {
-        var success = true
-        
+    suspend fun cleanupServerConfig(serverConfig: ZKyNetServerConfig): Boolean = withContext(Dispatchers.IO) {
         try {
-            // Delete local config file
-            val configFile = File(oldConfigPath)
-            if (configFile.exists()) {
-                val deleted = configFile.delete()
-                Log.i(TAG, "Local config file deleted: $deleted for ${serverConfig.displayName}")
-                if (!deleted) success = false
+            Timber.i("Starting cleanup for server: ${serverConfig.displayName}")
+            
+            // Get stored peer info
+            val peerInfo = peerIdManager.getCompletePeerInfo(serverConfig)
+            
+            if (peerInfo != null) {
+                val (uuid, _, configPath) = peerInfo
+                
+                // Delete local config file if it exists
+                if (configPath != null && File(configPath).exists()) {
+                    val deleted = File(configPath).delete()
+                    Timber.i("Local config file deleted: $deleted for ${serverConfig.displayName}")
+                }
+                
+                // Delete remote peer configuration
+                val remoteDeleted = deletePeerByUuid(serverConfig, uuid)
+                if (!remoteDeleted) {
+                    Timber.w("Remote peer deletion failed, but continuing...")
+                }
             }
             
-            // Generate the same peer ID that was used for creation
-            val peerId = "android-${serverConfig.id}-user"
-            
-            // Delete remote peer configuration
-            val remoteDeleted = deletePeerFromServer(serverConfig, peerId)
-            if (!remoteDeleted) {
-                Log.w(TAG, "Remote peer deletion failed, but continuing...")
-                // Don't fail the entire operation for remote cleanup issues
+            // Clear all stored peer data
+            val dataCleared = peerIdManager.clearServerData(serverConfig)
+            if (!dataCleared) {
+                Timber.w("Failed to clear peer data for ${serverConfig.displayName}")
             }
             
-            return@withContext success
+            Timber.i("Cleanup completed for server: ${serverConfig.displayName}")
+            return@withContext true
             
         } catch (e: Exception) {
-            Log.e(TAG, "Error during config cleanup", e)
+            Timber.e(e, "Error during config cleanup for ${serverConfig.displayName}")
             return@withContext false
         }
     }

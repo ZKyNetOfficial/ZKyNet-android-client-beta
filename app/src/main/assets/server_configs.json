@@ -7,21 +7,19 @@
   },
   "servers": [
     {
-      "id": "test-server",
-      "displayName": "Test Server",
-      "location": "Test Location",
-      "country": "Test",
-      "apiUrl": "https://vpn.mediabeam.cc",
-      "token": "test-server-api-key-12345",
-      "isTestServer": true,
-      "pingEndpoint": "vpn.mediabeam.cc",
+      "displayName": "lauterbourg",
+      "location": "lauterbourg",
+      "country": "france",
+      "apiUrl": "https://france-lauterbourg.vpn.zkynet.org",
+      "token": "fZHEvRkLTyrWSrLkipuDLpWM-D3bCCDvh0V8SohnpSA",
+      "isTestServer": false,
+      "pingEndpoint": "france-lauterbourg.vpn.zkynet.org",
       "retryAttempts": 3,
       "retryDelayMs": 2000,
       "connectionTimeoutMs": 30000,
       "isEnabled": true
     },
     {
-      "id": "us-east-1",
       "displayName": "New York",
       "location": "New York",
       "country": "United States",
@@ -35,7 +33,6 @@
       "isEnabled": true
     },
     {
-      "id": "us-west-1",
       "displayName": "Los Angeles",
       "location": "Los Angeles",
       "country": "United States",
@@ -49,7 +46,6 @@
       "isEnabled": true
     },
     {
-      "id": "eu-west-1",
       "displayName": "London",
       "location": "London",
       "country": "United Kingdom",
@@ -57,20 +53,6 @@
       "token": "your-production-api-key-eu-west",
       "isTestServer": false,
       "pingEndpoint": "eu-west-1.your-domain.com",
-      "retryAttempts": 3,
-      "retryDelayMs": 2000,
-      "connectionTimeoutMs": 30000,
-      "isEnabled": true
-    },
-    {
-      "id": "eu-central-1",
-      "displayName": "Frankfurt",
-      "location": "Frankfurt",
-      "country": "Germany",
-      "apiUrl": "https://eu-central-1.your-domain.com:8090",
-      "token": "your-production-api-key-eu-central",
-      "isTestServer": false,
-      "pingEndpoint": "eu-central-1.your-domain.com",
       "retryAttempts": 3,
       "retryDelayMs": 2000,
       "connectionTimeoutMs": 30000,

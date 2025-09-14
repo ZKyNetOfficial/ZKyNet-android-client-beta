@@ -4,8 +4,8 @@ import android.util.Log
 import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.core.tunnel.TunnelManager
 import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
+import com.zaneschepke.wireguardautotunnel.data.service.ConfigValidationService
 import com.zaneschepke.wireguardautotunnel.data.service.DynamicServerConfigManager
-import com.zaneschepke.wireguardautotunnel.data.service.ZKyNetVpnService
 import com.zaneschepke.wireguardautotunnel.di.IoDispatcher
 import com.zaneschepke.wireguardautotunnel.domain.model.AppSettings
 import com.zaneschepke.wireguardautotunnel.domain.model.TunnelConf
@@ -36,7 +36,7 @@ import javax.inject.Singleton
 @Singleton
 class VpnConnectionManager @Inject constructor(
     private val tunnelManager: TunnelManager,
-    private val zkynetVpnService: ZKyNetVpnService,
+    private val configValidationService: ConfigValidationService,
     private val configManager: DynamicServerConfigManager,
     private val appDataRepository: AppDataRepository,
     @param:IoDispatcher private val ioDispatcher: CoroutineDispatcher
@@ -216,14 +216,28 @@ class VpnConnectionManager @Inject constructor(
             }
         }
         
-        // Step 2: Retrieve or download configuration
-        val configFilePath = zkynetVpnService.getServerConfig(serverConfig)
-        if (configFilePath == null) {
-            Timber.e("Failed to retrieve config for server: ${serverConfig.displayName}")
-            return@withContext ConnectionResult.Error(
-                StringValue.StringResource(R.string.error_download_failed),
-                shouldRetry = true
-            )
+        // Step 2: Validate and retrieve configuration using new validation flow
+        val validationResult = configValidationService.validateAndGetConfig(serverConfig)
+        
+        val (configFilePath, validatedServerConfig) = when (validationResult) {
+            is ConfigValidationService.ValidationResult.Success -> {
+                Timber.i("Config validation successful for ${serverConfig.displayName}")
+                Pair(validationResult.configPath, validationResult.serverConfig)
+            }
+            is ConfigValidationService.ValidationResult.Error -> {
+                Timber.e("Config validation failed: ${validationResult.message}")
+                return@withContext ConnectionResult.Error(
+                    StringValue.DynamicString(validationResult.message),
+                    shouldRetry = validationResult.shouldRetry
+                )
+            }
+            is ConfigValidationService.ValidationResult.RequiresDownload -> {
+                Timber.e("Config validation indicates download required but failed")
+                return@withContext ConnectionResult.Error(
+                    StringValue.StringResource(R.string.error_download_failed),
+                    shouldRetry = true
+                )
+            }
         }
         
         // Step 3: Validate configuration format
@@ -242,8 +256,8 @@ class VpnConnectionManager @Inject constructor(
         } catch (e: BadConfigException) {
             Timber.e(e, "Invalid WireGuard config for server: ${serverConfig.displayName}")
             
-            // Delete invalid config and retry
-            deleteConfigFiles(configFilePath, serverConfig)
+            // Config validation service should have caught this, but cleanup if needed
+            // Note: The validation service will handle cleanup and retry automatically
             
             return@withContext ConnectionResult.Error(
                 StringValue.StringResource(R.string.error_file_format),
@@ -340,18 +354,6 @@ class VpnConnectionManager @Inject constructor(
         }
     }
     
-    /**
-     * Deletes configuration files (local and attempts remote cleanup)
-     * Implements the requirement: "Delete old config locally + Send API call to delete remotely"
-     */
-    private suspend fun deleteConfigFiles(configFilePath: String, serverConfig: ZKyNetServerConfig) {
-        try {
-            val cleanupSuccess = zkynetVpnService.cleanupOldConfig(configFilePath, serverConfig)
-            Timber.i("Config cleanup completed for ${serverConfig.displayName}: $cleanupSuccess")
-        } catch (e: Exception) {
-            Timber.e(e, "Error during config cleanup")
-        }
-    }
     
     /**
      * Validates connection health by testing internet connectivity
