@@ -58,6 +58,10 @@ sealed class AppEvent {
 
     data class StopTunnel(val tunnel: TunnelConf) : AppEvent()
 
+    data class RenameTunnel(val tunnel: TunnelConf, val newName: String) : AppEvent()
+
+    data class DeleteTunnel(val tunnel: TunnelConf) : AppEvent()
+
     data class ConnectToZKyNetServer(val serverConfig: ZKyNetServerConfig) : AppEvent()
     
     data object ReloadServerConfigs : AppEvent()

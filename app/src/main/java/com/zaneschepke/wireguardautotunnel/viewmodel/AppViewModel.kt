@@ -177,6 +177,8 @@ constructor(
                     AppEvent.SetBatteryOptimizeDisableShown -> setBatteryOptimizeDisableShown()
                     is AppEvent.StartTunnel -> handleStartTunnel(event.tunnel, state.appSettings)
                     is AppEvent.StopTunnel -> handleStopTunnel(event.tunnel)
+                    is AppEvent.RenameTunnel -> handleRenameTunnel(event.tunnel, event.newName)
+                    is AppEvent.DeleteTunnel -> handleDeleteTunnel(event.tunnel)
                     is AppEvent.ConnectToZKyNetServer -> handleConnectToZKyNetServer(event.serverConfig, state.tunnels, state.appSettings)
                     AppEvent.ReloadServerConfigs -> handleReloadServerConfigs()
                     AppEvent.ToggleAutoTunnel -> handleToggleAutoTunnel(state)
@@ -415,6 +417,21 @@ constructor(
     private suspend fun handleStopTunnel(tunnel: TunnelConf) {
         clearSelectedTunnels()
         tunControlMutex.withLock { tunnelManager.stopTunnel(tunnel) }
+    }
+
+    private suspend fun handleRenameTunnel(tunnel: TunnelConf, newName: String) {
+        clearSelectedTunnels()
+        val updatedTunnel = tunnel.copy(tunName = newName)
+        appDataRepository.tunnels.save(updatedTunnel)
+    }
+
+    private suspend fun handleDeleteTunnel(tunnel: TunnelConf) {
+        clearSelectedTunnels()
+        tunControlMutex.withLock { 
+            tunnelManager.stopTunnel(tunnel)
+            appDataRepository.tunnels.delete(tunnel)
+            appDataRepository.appState.removeTunnelExpanded(tunnel.id)
+        }
     }
 
     private suspend fun handleToggleAutoTunnel(state: AppUiState) {
