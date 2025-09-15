@@ -267,8 +267,14 @@ fun ConnectScreen(
                             // Connect to manual tunnel
                             viewModel.handleEvent(AppEvent.StartTunnel(tunnel))
                         },
-                        onLongPress = {
+                        onEdit = {
                             navController.navigate(Route.Config(tunnel.id))
+                        },
+                        onDelete = {
+                            // Clear any previously selected tunnels and select this one for deletion
+                            viewModel.handleEvent(AppEvent.ClearSelectedTunnels)
+                            viewModel.handleEvent(AppEvent.ToggleSelectedTunnel(tunnel))
+                            viewModel.handleEvent(AppEvent.SetShowModal(AppViewState.ModalType.DELETE))
                         }
                     )
                 }
@@ -407,7 +413,7 @@ fun ConnectScreen(
                                 // Show the tunnel import bottom sheet
                                 viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.IMPORT_TUNNELS))
                             },
-                            onLongPress = {
+                            onEdit = {
                                 // Navigate to config screen for custom endpoint configuration
                                 navController.navigate(Route.Config(Constants.MANUAL_TUNNEL_CONFIG_ID))
                             }

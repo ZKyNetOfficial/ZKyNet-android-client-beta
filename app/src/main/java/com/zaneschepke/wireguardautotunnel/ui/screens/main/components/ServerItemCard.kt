@@ -74,6 +74,7 @@ fun ServerItemCard(
     onRetry: (() -> Unit)? = null,
     onEdit: (() -> Unit)? = null,
     onLongPress: (() -> Unit)? = null,
+    onDelete: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val isConnected = server.connectionStatus == ConnectionStatus.CONNECTED
@@ -86,6 +87,10 @@ fun ServerItemCard(
     val isTv = LocalIsAndroidTV.current
     val haptic = LocalHapticFeedback.current
     val interactionSource = remember { MutableInteractionSource() }
+    
+    // Context menu state for manual tunnels
+    var showContextMenu by remember { mutableStateOf(false) }
+    val showMenuForManualTunnel = server.serverType == ServerType.MANUAL && onDelete != null
     
     val clickAction: () -> Unit = when {
         isConnected -> fun() { } // No action when connected
@@ -105,7 +110,9 @@ fun ServerItemCard(
                         onClick = clickAction,
                         onLongClick = {
                             haptic.performHapticFeedback(HapticFeedbackType.LongPress)
-                            if (onLongPress != null) {
+                            if (showMenuForManualTunnel) {
+                                showContextMenu = true
+                            } else if (onLongPress != null) {
                                 onLongPress()
                             }
                         }
@@ -250,6 +257,16 @@ fun ServerItemCard(
                     fontWeight = FontWeight.Medium
                 ),
                 color = getStatusTextColor(server.serverType, server.connectionStatus)
+            )
+        }
+        
+        // Context menu for manual tunnels
+        if (showMenuForManualTunnel) {
+            ServerContextMenu(
+                expanded = showContextMenu,
+                onDismiss = { showContextMenu = false },
+                onDelete = { onDelete?.invoke() },
+                onSettings = { onEdit?.invoke() ?: onLongPress?.invoke() }
             )
         }
     }
