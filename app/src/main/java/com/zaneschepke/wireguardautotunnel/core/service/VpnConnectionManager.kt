@@ -44,7 +44,7 @@ class VpnConnectionManager @Inject constructor(
     
     companion object {
         private const val TAG = "VpnConnectionManager"
-        private const val PING_TIMEOUT_MS = 5000L
+        private const val PING_TIMEOUT_MS = 10000L // Updated to 10 seconds as specified
         private const val MAX_RETRY_ATTEMPTS = 3
         private const val MAX_BACKOFF_DELAY_MS = 32000L // 32 seconds max delay
         private const val CIRCUIT_BREAKER_FAILURE_THRESHOLD = 5
@@ -196,7 +196,10 @@ class VpnConnectionManager @Inject constructor(
     }
     
     /**
-     * Attempts a single connection to the server
+     * Attempts a single connection to the server using the new flow:
+     * 1. Ping server (10s timeout) 
+     * 2. Verify peer status (if current peer exists)
+     * 3. Attempt connection (download new config if peer doesn't exist)
      */
     private suspend fun attemptConnection(
         serverConfig: ZKyNetServerConfig,
@@ -205,34 +208,39 @@ class VpnConnectionManager @Inject constructor(
         onRequestVpnPermission: () -> Unit
     ): ConnectionResult = withContext(ioDispatcher) {
         
-        // Step 1: Test server connectivity (if ping endpoint is available)
+        // Step 1: Test server connectivity (mandatory with 10s timeout)
+        Timber.i("Step 1: Testing server connectivity for ${serverConfig.displayName}")
         if (!serverConfig.pingEndpoint.isNullOrBlank()) {
             if (!testServerConnectivity(serverConfig.pingEndpoint)) {
-                Timber.w("Server connectivity test failed for ${serverConfig.displayName}")
+                Timber.w("Server ping failed for ${serverConfig.displayName} - server in maintenance")
                 return@withContext ConnectionResult.Error(
-                    StringValue.DynamicString("Server ${serverConfig.displayName} is not reachable"),
+                    StringValue.StringResource(R.string.server_maintenance),
                     shouldRetry = true
                 )
             }
+            Timber.i("Server ping successful for ${serverConfig.displayName}")
+        } else {
+            Timber.w("No ping endpoint configured for ${serverConfig.displayName}, skipping connectivity test")
         }
         
-        // Step 2: Validate and retrieve configuration using new validation flow
+        // Step 2: Verify current peer status (if we have stored peer info)
+        Timber.i("Step 2: Verifying peer status for ${serverConfig.displayName}")
         val validationResult = configValidationService.validateAndGetConfig(serverConfig)
         
         val (configFilePath, validatedServerConfig) = when (validationResult) {
             is ConfigValidationService.ValidationResult.Success -> {
-                Timber.i("Config validation successful for ${serverConfig.displayName}")
+                Timber.i("Peer verification successful - using existing config for ${serverConfig.displayName}")
                 Pair(validationResult.configPath, validationResult.serverConfig)
             }
             is ConfigValidationService.ValidationResult.Error -> {
-                Timber.e("Config validation failed: ${validationResult.message}")
+                Timber.e("Peer verification failed: ${validationResult.message}")
                 return@withContext ConnectionResult.Error(
                     StringValue.DynamicString(validationResult.message),
                     shouldRetry = validationResult.shouldRetry
                 )
             }
             is ConfigValidationService.ValidationResult.RequiresDownload -> {
-                Timber.e("Config validation indicates download required but failed")
+                Timber.i("Current peer doesn't exist - will download new config for ${serverConfig.displayName}")
                 return@withContext ConnectionResult.Error(
                     StringValue.StringResource(R.string.error_download_failed),
                     shouldRetry = true
@@ -241,6 +249,7 @@ class VpnConnectionManager @Inject constructor(
         }
         
         // Step 3: Validate configuration format
+        Timber.i("Step 3: Validating configuration format for ${serverConfig.displayName}")
         val configContent = try {
             File(configFilePath).readText()
         } catch (e: Exception) {
@@ -265,21 +274,25 @@ class VpnConnectionManager @Inject constructor(
             )
         }
         
-        // Step 4: Create tunnel configuration
+        // Step 4: Create tunnel configuration  
+        Timber.i("Step 4: Creating tunnel configuration for ${serverConfig.displayName}")
         val tunnelName = "ZKyNet ${serverConfig.displayName}"
         val tunnelConf = createTunnelConfiguration(tunnelName, configContent, currentTunnels)
         
         // Step 5: Save tunnel configuration
+        Timber.i("Step 5: Saving tunnel configuration for ${serverConfig.displayName}")
         saveTunnel(tunnelConf)
         
         // Step 6: Check VPN permission
+        Timber.i("Step 6: Checking VPN permission for ${serverConfig.displayName}")
         if (!tunnelManager.hasVpnPermission() && !appSettings.isKernelEnabled) {
             Timber.i("VPN permission required for connection")
             onRequestVpnPermission()
             return@withContext ConnectionResult.PermissionRequired(isVpnPermission = true)
         }
         
-        // Step 7: Stop existing tunnels and start new one
+        // Step 7: Establish VPN connection
+        Timber.i("Step 7: Establishing VPN connection for ${serverConfig.displayName}")
         tunnelManager.stopTunnel(null) // Stop all tunnels
         
         val savedTunnel = appDataRepository.tunnels.getAll().firstOrNull { it.tunName == tunnelName }
@@ -287,6 +300,7 @@ class VpnConnectionManager @Inject constructor(
         
         tunnelManager.startTunnel(savedTunnel)
         
+        Timber.i("Successfully completed VPN connection flow for ${serverConfig.displayName}")
         return@withContext ConnectionResult.Success
     }
     

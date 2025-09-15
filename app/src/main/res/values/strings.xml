@@ -203,6 +203,7 @@
     <string name="add_from_url">Add from URL</string>
     <string name="enter_config_url">Enter config URL</string>
     <string name="error_download_failed">Failed to download config</string>
+    <string name="server_maintenance">Server in maintenance</string>
     <string name="save">Save</string>
 	<string name="search">Search</string>
 	<string name="select">Select</string>

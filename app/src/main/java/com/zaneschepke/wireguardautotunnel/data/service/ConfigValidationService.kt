@@ -19,10 +19,11 @@ import javax.inject.Singleton
 
 /**
  * Orchestrates the complete validation flow for VPN configurations.
+ * Works with the new streamlined API that uses unified /peers/config endpoint.
  * Implements the required flow:
  * 1. Check if local .conf exists for server
  * 2. If exists, verify UUID is still valid on server
- * 3. If invalid/missing, download fresh config with new UUID
+ * 3. If invalid/missing, download fresh config with new UUID using unified endpoint
  * 4. Return validated config path for connection
  */
 @Singleton
@@ -158,7 +159,7 @@ class ConfigValidationService @Inject constructor(
     }
     
     /**
-     * Step 3: Download fresh configuration with new UUID
+     * Step 3: Download fresh configuration with new UUID using streamlined API
      */
     private suspend fun downloadFreshConfig(serverConfig: ZKyNetServerConfig): ValidationResult = withContext(Dispatchers.IO) {
         try {
@@ -167,7 +168,8 @@ class ConfigValidationService @Inject constructor(
             // Clean up old data first
             peerIdManager.clearServerData(serverConfig)
             
-            // Get new config from server (server will generate new UUID)
+            // Get new config from server using unified /peers/config endpoint
+            // This single call creates peer and returns config with auto-generated UUID
             val configPath = zkynetVpnService.downloadFreshConfig(serverConfig)
             
             if (configPath != null) {

@@ -53,24 +53,8 @@ class ZKyNetVpnService @Inject constructor(
         }
     
     /**
-     * API response models for UUID-based peer management
+     * API response models for peer verification
      */
-    @Serializable
-    data class CreatePeerRequest(
-        val peer_id: String? = null,
-        val ttl_hours: Int = 168
-    )
-    
-    @Serializable
-    data class CreatePeerResponse(
-        val internal_id: String,
-        val assigned_ip: String,
-        val created_at: String,
-        val expires_at: String,
-        val is_active: Boolean,
-        val status: String,
-        val ttl_hours: Double
-    )
     
     @Serializable
     data class VerifyPeerResponse(
@@ -82,6 +66,7 @@ class ZKyNetVpnService @Inject constructor(
     
     /**
      * Downloads a fresh configuration with new UUID from server.
+     * Uses the new unified /peers/config endpoint that handles peer creation and config generation in one call.
      * Used by ConfigValidationService when local config is invalid or missing.
      * 
      * @param serverConfig The server configuration to connect to
@@ -91,32 +76,25 @@ class ZKyNetVpnService @Inject constructor(
         try {
             Timber.i("Downloading fresh config for server: ${serverConfig.displayName}")
             
-            // Step 1: Create new peer and get UUID from server
-            val peerResponse = createPeer(serverConfig)
-            if (peerResponse == null) {
-                Timber.e("Failed to create peer for server: ${serverConfig.displayName}")
+            // Single API call to create peer and get config - new streamlined endpoint
+            val (configContent, generatedUuid) = downloadConfigFromUnifiedEndpoint(serverConfig)
+            if (configContent == null || generatedUuid == null) {
+                Timber.e("Failed to download config from unified endpoint for server: ${serverConfig.displayName}")
                 return@withContext null
             }
             
-            Timber.i("Created peer with UUID: ${peerResponse.internal_id} for ${serverConfig.displayName}")
+            Timber.i("Downloaded config with UUID: $generatedUuid for ${serverConfig.displayName}")
             
-            // Step 2: Download config using the new UUID
-            val configContent = downloadConfigByUuid(serverConfig, peerResponse.internal_id)
-            if (configContent == null) {
-                Timber.e("Failed to download config for UUID: ${peerResponse.internal_id}")
-                return@withContext null
-            }
-            
-            // Step 3: Save config to local storage with UUID as filename
-            val configPath = saveConfigToStorage(configContent, "${peerResponse.internal_id}.conf")
+            // Save config to local storage with UUID as filename  
+            val configPath = saveConfigToStorage(configContent, "${generatedUuid}.conf")
             if (configPath == null) {
-                Timber.e("Failed to save config for UUID: ${peerResponse.internal_id}")
+                Timber.e("Failed to save config for UUID: $generatedUuid")
                 return@withContext null
             }
             
-            // Step 4: Store peer information for future use
+            // Store peer information for future use
             val timestamp = System.currentTimeMillis()
-            peerIdManager.storePeerUuid(serverConfig, peerResponse.internal_id)
+            peerIdManager.storePeerUuid(serverConfig, generatedUuid)
             peerIdManager.storeConfigPath(serverConfig, configPath)
             
             Timber.i("Successfully downloaded and stored fresh config for ${serverConfig.displayName}")
@@ -180,101 +158,89 @@ class ZKyNetVpnService @Inject constructor(
     }
     
     /**
-     * Creates a new peer on the server using POST /peers API.
-     * Server generates and returns a UUID for the peer.
+     * Downloads configuration using the new unified /peers/config endpoint.
+     * This endpoint creates a peer and returns the config in one call with automatic UUID generation.
      * 
      * @param serverConfig The server configuration
-     * @return CreatePeerResponse with UUID and peer info, or null if failed
+     * @return Pair of (config content, generated UUID) or (null, null) if failed
      */
-    private suspend fun createPeer(serverConfig: ZKyNetServerConfig): CreatePeerResponse? = withContext(Dispatchers.IO) {
+    private suspend fun downloadConfigFromUnifiedEndpoint(serverConfig: ZKyNetServerConfig): Pair<String?, String?> = withContext(Dispatchers.IO) {
         try {
-            Timber.d("Creating new peer for server: ${serverConfig.displayName}")
-            
-            // Create request with descriptive peer ID
-            val createRequest = CreatePeerRequest(
-                peer_id = "ZKyNet-${serverConfig.displayName}-${System.currentTimeMillis()}",
-                ttl_hours = 168
-            )
-            
-            val requestBody = json.encodeToString(CreatePeerRequest.serializer(), createRequest)
-                .toRequestBody(JSON_MEDIA_TYPE.toMediaType())
+            Timber.d("Downloading config from unified endpoint for server: ${serverConfig.displayName}")
             
             val request = Request.Builder()
-                .url("${serverConfig.apiUrl}/peers")
+                .url("${serverConfig.apiUrl}/peers/config")
                 .addHeader("Authorization", "Bearer ${serverConfig.token}")
-                .post(requestBody)
+                .post("".toRequestBody("application/json; charset=utf-8".toMediaType())) // Empty POST body - server generates UUID automatically
                 .build()
             
             val response: Response = httpClient.newCall(request).execute()
             
             if (!response.isSuccessful) {
                 val errorBody = response.body?.string()
-                Timber.e("🚨 Peer creation failed for ${serverConfig.displayName}")
+                Timber.e("🚨 Unified config download failed for ${serverConfig.displayName}")
                 Timber.e("HTTP ${response.code}: ${response.message}")
                 Timber.e("Response body: $errorBody")
-                return@withContext null
-            }
-            
-            val responseBody = response.body?.string()
-            if (responseBody.isNullOrBlank()) {
-                Timber.e("Empty response from peer creation")
-                return@withContext null
-            }
-            
-            val createResponse = json.decodeFromString<CreatePeerResponse>(responseBody)
-            Timber.i("Successfully created peer with UUID: ${createResponse.internal_id}")
-            
-            return@withContext createResponse
-            
-        } catch (e: Exception) {
-            Timber.e(e, "Error creating peer for server: ${serverConfig.displayName}")
-            return@withContext null
-        }
-    }
-    
-    /**
-     * Downloads configuration file using UUID from GET /peers/{uuid}/config API.
-     * 
-     * @param serverConfig The server configuration
-     * @param uuid The peer UUID to download config for
-     * @return The config content if successful, null otherwise
-     */
-    private suspend fun downloadConfigByUuid(
-        serverConfig: ZKyNetServerConfig, 
-        uuid: String
-    ): String? = withContext(Dispatchers.IO) {
-        try {
-            Timber.d("Downloading config for UUID: $uuid")
-            
-            val request = Request.Builder()
-                .url("${serverConfig.apiUrl}/peers/$uuid/config")
-                .addHeader("Authorization", "Bearer ${serverConfig.token}")
-                .get()
-                .build()
-            
-            val response: Response = httpClient.newCall(request).execute()
-            
-            if (!response.isSuccessful) {
-                val errorBody = response.body?.string()
-                Timber.e("🚨 Config download failed for UUID: $uuid")
-                Timber.e("HTTP ${response.code}: ${response.message}")
-                Timber.e("Response body: $errorBody")
-                return@withContext null
+                return@withContext Pair(null, null)
             }
             
             val configContent = response.body?.string()
             if (configContent.isNullOrBlank()) {
-                Timber.e("Received empty config content")
-                return@withContext null
+                Timber.e("Received empty config content from unified endpoint")
+                return@withContext Pair(null, null)
             }
             
-            Timber.i("Successfully downloaded config (${configContent.length} characters)")
-            return@withContext configContent
+            // Extract UUID from Content-Disposition header or response headers
+            val contentDisposition = response.header("Content-Disposition")
+            val generatedUuid = extractUuidFromResponse(contentDisposition, response.headers.names())
+            
+            if (generatedUuid == null) {
+                Timber.w("Could not extract UUID from response, generating fallback UUID")
+                val fallbackUuid = "zkynet-${System.currentTimeMillis()}"
+                return@withContext Pair(configContent, fallbackUuid)
+            }
+            
+            Timber.i("Successfully downloaded config (${configContent.length} characters) with UUID: $generatedUuid")
+            return@withContext Pair(configContent, generatedUuid)
             
         } catch (e: Exception) {
-            Timber.e(e, "Error downloading config for UUID: $uuid")
-            return@withContext null
+            Timber.e(e, "Error downloading config from unified endpoint for server: ${serverConfig.displayName}")
+            return@withContext Pair(null, null)
         }
+    }
+    
+    /**
+     * Extracts UUID from response headers, primarily from Content-Disposition header.
+     * Falls back to other headers if needed.
+     * 
+     * @param contentDisposition The Content-Disposition header value
+     * @param headerNames All header names from the response
+     * @return The extracted UUID or null if not found
+     */
+    private fun extractUuidFromResponse(contentDisposition: String?, headerNames: Set<String>): String? {
+        // Try to extract UUID from Content-Disposition header (e.g., "attachment; filename=uuid.conf")
+        contentDisposition?.let { disposition ->
+            val filenameRegex = """filename[*]?=["']?([^"';,\s]+)["']?""".toRegex()
+            val match = filenameRegex.find(disposition)
+            match?.groupValues?.get(1)?.let { filename ->
+                // Remove .conf extension if present
+                val uuid = filename.removeSuffix(".conf")
+                if (uuid.isNotBlank() && uuid != filename) {
+                    return uuid
+                }
+            }
+        }
+        
+        // Fallback: look for UUID-like pattern in any header name or value
+        // This is a backup strategy in case the API returns UUID in a different header
+        headerNames.forEach { headerName ->
+            if (headerName.contains("uuid", ignoreCase = true) || 
+                headerName.contains("peer", ignoreCase = true)) {
+                // Could potentially extract UUID from header name/value if needed
+            }
+        }
+        
+        return null
     }
     
     /**

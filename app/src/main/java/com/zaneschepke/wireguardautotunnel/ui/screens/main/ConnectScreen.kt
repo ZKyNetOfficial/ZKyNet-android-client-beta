@@ -116,8 +116,9 @@ fun ConnectScreen(
     // Collect server configurations using the new state pattern
     val configurationState by configManager.configurationState.collectAsState()
     
-    // Check if any ZKyNet tunnels are currently active
+    // Check if any tunnels are currently active (ZKyNet or manual/custom)
     val activeTunnels = appUiState.activeTunnels
+    val anyActiveTunnel = activeTunnels.keys.firstOrNull()
     val zkynetActiveTunnel = activeTunnels.keys.find { it.tunName.startsWith("ZKyNet ") }
     val connectedServerId = zkynetActiveTunnel?.let { tunnel ->
         when (val state = configurationState) {
@@ -201,14 +202,19 @@ fun ConnectScreen(
     ) {
         // Connection Status Header
         ConnectionStatusCard(
-            isConnected = zkynetActiveTunnel != null,
-            connectedServerName = zkynetActiveTunnel?.let { tunnel ->
-                // Extract server name from tunnel name (remove "ZKyNet " prefix)
-                tunnel.tunName.removePrefix("ZKyNet ")
+            isConnected = anyActiveTunnel != null,
+            connectedServerName = anyActiveTunnel?.let { tunnel ->
+                // For ZKyNet servers, extract server name (remove "ZKyNet " prefix)
+                // For manual/custom tunnels, use the tunnel name as-is
+                if (tunnel.tunName.startsWith("ZKyNet ")) {
+                    tunnel.tunName.removePrefix("ZKyNet ")
+                } else {
+                    tunnel.tunName
+                }
             },
             onDisconnect = { 
-                // Disconnect the active ZKyNet tunnel
-                zkynetActiveTunnel?.let { tunnel ->
+                // Disconnect any active tunnel (ZKyNet or manual/custom)
+                anyActiveTunnel?.let { tunnel ->
                     viewModel.handleEvent(AppEvent.StopTunnel(tunnel))
                 }
             }
