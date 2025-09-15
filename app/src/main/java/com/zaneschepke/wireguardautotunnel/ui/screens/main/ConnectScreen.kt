@@ -12,6 +12,8 @@ package com.zaneschepke.wireguardautotunnel.ui.screens.main
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.VpnKey
 import androidx.compose.material3.Button
@@ -33,6 +35,7 @@ import com.journeyapps.barcodescanner.ScanContract
 import com.journeyapps.barcodescanner.ScanOptions
 import com.zaneschepke.wireguardautotunnel.R
 import com.zaneschepke.wireguardautotunnel.core.tunnel.getValueById
+import com.zaneschepke.wireguardautotunnel.data.model.ZKyNetServerConfig
 import com.zaneschepke.wireguardautotunnel.data.service.DynamicServerConfigManager
 import com.zaneschepke.wireguardautotunnel.domain.model.TunnelConf
 import com.zaneschepke.wireguardautotunnel.ui.Route
@@ -220,118 +223,197 @@ fun ConnectScreen(
             }
         )
         
-        // Manual Tunnels Section
-        ManualTunnelsSection(
-            appUiState = appUiState,
-            onConnectToTunnel = { tunnel ->
-                // Disconnect any existing tunnel before connecting
-                val activeTunnel = appUiState.activeTunnels.keys.firstOrNull()
-                activeTunnel?.let {
-                    viewModel.handleEvent(AppEvent.StopTunnel(it))
-                }
-                // Connect to manual tunnel
-                viewModel.handleEvent(AppEvent.StartTunnel(tunnel))
-            },
-            onEditTunnel = { tunnel ->
-                navController.navigate(Route.Config(tunnel.id))
-            },
-            onRetryConnection = { tunnel ->
-                viewModel.handleEvent(AppEvent.StartTunnel(tunnel))
-            }
-        )
-        
-        // Handle different configuration states
-        when (val state = configurationState) {
-            is DynamicServerConfigManager.ConfigurationState.Loading -> {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Loading server configurations...",
-                            style = MaterialTheme.typography.bodyMedium
-                        )
-                    }
-                }
+        // Unified Scrollable Content
+        LazyColumn(
+            modifier = Modifier.weight(1f),
+            verticalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            // Manual Tunnels Section
+            val manualTunnels = appUiState.tunnels.filter { tunnel ->
+                !tunnel.tunName.startsWith("ZKyNet ")
             }
             
-            is DynamicServerConfigManager.ConfigurationState.Error -> {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp)
-                    ) {
-                        Text(
-                            text = "Configuration Error",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Text(
-                            text = state.message,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onErrorContainer
-                        )
-                        Button(
-                            onClick = { viewModel.handleEvent(AppEvent.ReloadServerConfigs) },
-                            modifier = Modifier.padding(top = 8.dp)
-                        ) {
-                            Text("Retry")
-                        }
-                    }
+            if (manualTunnels.isNotEmpty()) {
+                item {
+                    Text(
+                        text = "Manual Configurations",
+                        style = MaterialTheme.typography.headlineMedium.copy(
+                            fontWeight = FontWeight.Bold
+                        ),
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
                 }
-            }
-            
-            is DynamicServerConfigManager.ConfigurationState.Empty -> {
-                Card(
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
-                ) {
-                    Column(
-                        modifier = Modifier.padding(16.dp),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Text(
-                            text = "No Server Configurations Found",
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = "Please check your configuration file",
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
-            }
-            
-            is DynamicServerConfigManager.ConfigurationState.Success -> {
-                // ZKyNet Server List
-                ZKyNetServerList(
-                    servers = state.servers,
-                    onConnectToServer = { server ->
-                        if (connectedServerId != server.id) {
-                            // Disconnect any existing tunnel before connecting to new server
+                
+                items(manualTunnels) { tunnel ->
+                    val tunnelDisplayInfo = ServerDisplayInfo(
+                        id = tunnel.id.toString(),
+                        displayName = tunnel.tunName,
+                        location = "Manual Configuration",
+                        country = "",
+                        serverType = ServerType.MANUAL,
+                        connectionStatus = if (appUiState.activeTunnels.containsKey(tunnel)) 
+                            ConnectionStatus.CONNECTED else ConnectionStatus.AVAILABLE
+                    )
+                    
+                    ServerItemCard(
+                        server = tunnelDisplayInfo,
+                        onConnect = {
+                            // Disconnect any existing tunnel before connecting
                             val activeTunnel = appUiState.activeTunnels.keys.firstOrNull()
-                            activeTunnel?.let { tunnel ->
-                                viewModel.handleEvent(AppEvent.StopTunnel(tunnel))
+                            activeTunnel?.let {
+                                viewModel.handleEvent(AppEvent.StopTunnel(it))
                             }
-                            // Connect to ZKyNet server using the AppViewModel
-                            viewModel.handleEvent(AppEvent.ConnectToZKyNetServer(server))
+                            // Connect to manual tunnel
+                            viewModel.handleEvent(AppEvent.StartTunnel(tunnel))
+                        },
+                        onLongPress = {
+                            navController.navigate(Route.Config(tunnel.id))
                         }
-                    },
-                    onCustomEndpointClick = {
-                        // Show the tunnel import bottom sheet
-                        viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.IMPORT_TUNNELS))
-                    },
-                    connectedServerId = connectedServerId,
-                    modifier = Modifier.weight(1f)
-                )
+                    )
+                }
+            }
+            
+            // Handle different configuration states for ZKyNet servers
+            when (val state = configurationState) {
+                is DynamicServerConfigManager.ConfigurationState.Loading -> {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        ) {
+                            Row(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Loading server configurations...",
+                                    style = MaterialTheme.typography.bodyMedium
+                                )
+                            }
+                        }
+                    }
+                }
+            
+                is DynamicServerConfigManager.ConfigurationState.Error -> {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.errorContainer)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp)
+                            ) {
+                                Text(
+                                    text = "Configuration Error",
+                                    style = MaterialTheme.typography.titleMedium,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                Text(
+                                    text = state.message,
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onErrorContainer
+                                )
+                                Button(
+                                    onClick = { viewModel.handleEvent(AppEvent.ReloadServerConfigs) },
+                                    modifier = Modifier.padding(top = 8.dp)
+                                ) {
+                                    Text("Retry")
+                                }
+                            }
+                        }
+                    }
+                }
+            
+                is DynamicServerConfigManager.ConfigurationState.Empty -> {
+                    item {
+                        Card(
+                            modifier = Modifier.fillMaxWidth(),
+                            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
+                        ) {
+                            Column(
+                                modifier = Modifier.padding(16.dp),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "No Server Configurations Found",
+                                    style = MaterialTheme.typography.titleMedium
+                                )
+                                Text(
+                                    text = "Please check your configuration file",
+                                    style = MaterialTheme.typography.bodyMedium,
+                                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                                )
+                            }
+                        }
+                    }
+                }
+                
+                is DynamicServerConfigManager.ConfigurationState.Success -> {
+                    // ZKyNet Servers Header
+                    item {
+                        Text(
+                            text = "ZKyNet Servers",
+                            style = MaterialTheme.typography.headlineMedium.copy(
+                                fontWeight = FontWeight.Bold
+                            ),
+                            color = MaterialTheme.colorScheme.onSurface,
+                            modifier = Modifier.padding(bottom = 8.dp)
+                        )
+                    }
+                    
+                    // ZKyNet Server Items
+                    items(state.servers) { server ->
+                        val serverDisplayInfo = ServerDisplayInfo(
+                            id = server.id,
+                            displayName = server.displayName,
+                            location = server.location,
+                            country = server.country,
+                            serverType = if (server.isTestServer) ServerType.ZKYNET_TEST else ServerType.ZKYNET_REGULAR,
+                            connectionStatus = if (server.id == connectedServerId) ConnectionStatus.CONNECTED else ConnectionStatus.AVAILABLE
+                        )
+                        
+                        ServerItemCard(
+                            server = serverDisplayInfo,
+                            onConnect = { 
+                                if (connectedServerId != server.id) {
+                                    // Disconnect any existing tunnel before connecting to new server
+                                    val activeTunnel = appUiState.activeTunnels.keys.firstOrNull()
+                                    activeTunnel?.let { tunnel ->
+                                        viewModel.handleEvent(AppEvent.StopTunnel(tunnel))
+                                    }
+                                    // Connect to ZKyNet server using the AppViewModel
+                                    viewModel.handleEvent(AppEvent.ConnectToZKyNetServer(server))
+                                }
+                            }
+                        )
+                    }
+                    
+                    // Custom Endpoint Button (now in the unified list)
+                    item {
+                        val customEndpointDisplayInfo = ServerDisplayInfo(
+                            id = "custom_endpoint",
+                            displayName = "Custom Endpoint",
+                            location = "Import your own VPN configuration",
+                            country = "",
+                            serverType = ServerType.MANUAL,
+                            connectionStatus = ConnectionStatus.AVAILABLE
+                        )
+                        
+                        ServerItemCard(
+                            server = customEndpointDisplayInfo,
+                            onConnect = {
+                                // Show the tunnel import bottom sheet
+                                viewModel.handleEvent(AppEvent.SetBottomSheet(AppViewState.BottomSheet.IMPORT_TUNNELS))
+                            },
+                            onLongPress = {
+                                // Navigate to config screen for custom endpoint configuration
+                                navController.navigate(Route.Config(Constants.MANUAL_TUNNEL_CONFIG_ID))
+                            }
+                        )
+                    }
+                }
             }
         }
     }

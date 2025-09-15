@@ -9,6 +9,9 @@
 
 package com.zaneschepke.wireguardautotunnel.ui.screens.main.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.LocationOn
@@ -19,8 +22,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.zaneschepke.wireguardautotunnel.ui.navigation.LocalIsAndroidTV
 
 /**
  * Server types for styling and behavior differentiation
@@ -60,13 +66,14 @@ data class ServerDisplayInfo(
  * Reusable server item card component that handles both TORUS servers and manual tunnels.
  * Provides proper error handling, status management, and consistent styling.
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ServerItemCard(
     server: ServerDisplayInfo,
     onConnect: () -> Unit,
     onRetry: (() -> Unit)? = null,
     onEdit: (() -> Unit)? = null,
+    onLongPress: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     val isConnected = server.connectionStatus == ConnectionStatus.CONNECTED
@@ -76,6 +83,9 @@ fun ServerItemCard(
         ConnectionStatus.NETWORK_ERROR
     )
     val isConnecting = server.connectionStatus == ConnectionStatus.CONNECTING
+    val isTv = LocalIsAndroidTV.current
+    val haptic = LocalHapticFeedback.current
+    val interactionSource = remember { MutableInteractionSource() }
     
     val clickAction: () -> Unit = when {
         isConnected -> fun() { } // No action when connected
@@ -85,8 +95,23 @@ fun ServerItemCard(
     }
     
     Card(
-        onClick = clickAction,
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .then(
+                if (!isTv) {
+                    Modifier.combinedClickable(
+                        interactionSource = interactionSource,
+                        indication = ripple(),
+                        onClick = clickAction,
+                        onLongClick = {
+                            haptic.performHapticFeedback(HapticFeedbackType.LongPress)
+                            if (onLongPress != null) {
+                                onLongPress()
+                            }
+                        }
+                    )
+                } else Modifier
+            ),
         colors = CardDefaults.cardColors(
             containerColor = getContainerColor(server.serverType, server.connectionStatus)
         ),

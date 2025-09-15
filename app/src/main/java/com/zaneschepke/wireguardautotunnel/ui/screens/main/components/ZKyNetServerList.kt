@@ -28,7 +28,6 @@ fun ZKyNetServerList(
     servers: List<ZKyNetServerConfig>,
     onConnectToServer: (ZKyNetServerConfig) -> Unit,
     connectedServerId: String? = null,
-    onCustomEndpointClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -59,23 +58,6 @@ fun ZKyNetServerList(
             ServerItemCard(
                 server = serverDisplayInfo,
                 onConnect = { onConnectToServer(server) }
-            )
-        }
-        
-        // Custom Endpoint button at the bottom
-        item {
-            val customEndpointDisplayInfo = ServerDisplayInfo(
-                id = "custom_endpoint",
-                displayName = "Custom Endpoint",
-                location = "Import your own VPN configuration",
-                country = "",
-                serverType = ServerType.MANUAL,
-                connectionStatus = ConnectionStatus.AVAILABLE
-            )
-            
-            ServerItemCard(
-                server = customEndpointDisplayInfo,
-                onConnect = onCustomEndpointClick
             )
         }
     }
