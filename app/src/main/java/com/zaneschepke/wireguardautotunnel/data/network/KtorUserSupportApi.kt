@@ -35,36 +35,7 @@ class KtorUserSupportApi @Inject constructor(
     
     companion object {
         private const val TAG = "UserSupportApi"
-        // TODO: Replace with actual support API base URL from configuration
-        private const val BASE_URL = "https://support.your-domain.com"
-    }
-    
-    override suspend fun sendSupportSignal(): Result<SupportResponse> = withContext(Dispatchers.IO) {
-        return@withContext try {
-            Log.i(TAG, "Sending anonymous support signal")
-            
-            // Send anonymous support signal (no email required)
-            val response: SupportResponse = client.post("$BASE_URL/api/support") {
-                contentType(ContentType.Application.Json)
-                setBody(SupportRequest(email = "anonymous-signal@torus.local"))
-            }.body()
-            
-            Log.i(TAG, "Support signal sent successfully")
-            Result.success(response)
-            
-        } catch (e: ClientRequestException) {
-            Log.e(TAG, "Support signal failed with status: ${e.response.status}")
-            when (e.response.status) {
-                HttpStatusCode.TooManyRequests -> 
-                    Result.failure(Exception("Rate limit exceeded. Please try again later."))
-                HttpStatusCode.BadRequest -> 
-                    Result.failure(Exception("Invalid request format"))
-                else -> Result.failure(Exception("Server error: ${e.response.status}"))
-            }
-        } catch (e: Exception) {
-            Log.e(TAG, "Network error sending support signal", e)
-            Result.failure(Exception("Network error. Signal will be queued for retry."))
-        }
+        private const val BASE_URL = "https://france-lauterbourg.vpn.zkynet.org"
     }
     
     override suspend fun submitEmailForUpdates(email: String): Result<SupportResponse> = withContext(Dispatchers.IO) {

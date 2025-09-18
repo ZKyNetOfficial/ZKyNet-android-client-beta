@@ -88,23 +88,6 @@ fun SupportSection(
                     )
                 }
                 
-                // Back the Vision Button
-                Button(
-                    onClick = { bottomSheetState.show(BottomSheetType.BackVision) },
-                    modifier = Modifier.fillMaxWidth(),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = MaterialTheme.colorScheme.tertiary
-                    ),
-                    shape = RoundedCornerShape(12.dp)
-                ) {
-                    Text(
-                        text = "🔥 Back the Vision",
-                        style = MaterialTheme.typography.titleMedium.copy(
-                            fontWeight = FontWeight.SemiBold
-                        )
-                    )
-                }
-                
                 // Node Operator Interest Button
                 Button(
                     onClick = { bottomSheetState.show(BottomSheetType.NodeOperator) },
@@ -116,6 +99,23 @@ fun SupportSection(
                 ) {
                     Text(
                         text = "🚀 Join the Node Interest List",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                }
+                
+                // Stay Updated Button (formerly Back the Vision)
+                Button(
+                    onClick = { bottomSheetState.show(BottomSheetType.BackVision) },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.tertiary
+                    ),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    Text(
+                        text = "📧 Stay Updated",
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.SemiBold
                         )

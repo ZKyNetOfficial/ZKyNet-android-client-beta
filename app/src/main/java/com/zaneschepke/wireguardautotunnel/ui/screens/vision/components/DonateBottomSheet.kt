@@ -14,7 +14,6 @@ import androidx.compose.material.icons.outlined.VolunteerActivism
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.size
 import com.zaneschepke.wireguardautotunnel.ui.common.bottomsheet.GlobalBottomSheet
@@ -27,8 +26,6 @@ fun DonateBottomSheet(
     isVisible: Boolean,
     onDismiss: () -> Unit
 ) {
-    val uriHandler = LocalUriHandler.current
-
     GlobalBottomSheet(
         isVisible = isVisible,
         onDismiss = onDismiss
@@ -46,13 +43,12 @@ fun DonateBottomSheet(
         )
         
         BottomSheetInfoCard(
-            text = "This will take you to our secure GitHub support page where you can safely support the project."
+            text = "Donations are currently unavailable. Please check back later for donation options."
         )
         
         BottomSheetPrimaryButton(
-            text = "Proceed to GitHub Support",
+            text = "OK",
             onClick = {
-                uriHandler.openUri("https://github.com/ZKyNet")
                 onDismiss()
             }
         )

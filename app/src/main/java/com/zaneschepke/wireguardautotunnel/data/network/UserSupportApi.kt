@@ -12,7 +12,6 @@ package com.zaneschepke.wireguardautotunnel.data.network
 import com.zaneschepke.wireguardautotunnel.data.entity.SupportResponse
 
 interface UserSupportApi {
-    suspend fun sendSupportSignal(): Result<SupportResponse>
     suspend fun submitEmailForUpdates(email: String): Result<SupportResponse>
     suspend fun submitNodeOperatorEmail(email: String): Result<SupportResponse>
     suspend fun checkApiHealth(): Result<Boolean>
