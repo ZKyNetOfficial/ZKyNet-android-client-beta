@@ -162,7 +162,7 @@ fun SupportSection(
                     
                     // GitHub Link
                     TextButton(
-                        onClick = { uriHandler.openUri("https://github.com/ZKyNet") }
+                        onClick = { uriHandler.openUri("https://github.com/ZKyNetOfficial") }
                     ) {
                         Text(
                             text = "⚡ GitHub",
