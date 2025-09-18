@@ -45,7 +45,6 @@ ZKyNet VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wg
 ### Key ZKyNet Customizations
 - Integrated ZKyNet server management via `ZKyNetVpnService`
 - Per-server VPN toggles replacing default tunnel-adding flow
-- Hardcoded test server configuration support
 - Automatic config download and caching for production servers
 - Custom UI with server selection interface
 
@@ -71,7 +70,6 @@ ZKyNet VPN is a customized fork of [WG Tunnel](https://github.com/zaneschepke/wg
 ### ZKyNet-Specific Features
 * **ZKyNet Server Integration**: Built-in server management and configuration
 * **Per-Server VPN Toggles**: Individual server connection controls
-* **Test Server Support**: Hardcoded test server configuration (peer1.conf)
 * **Automatic Config Management**: Download and cache production server configs
 * **Custom Server Selection UI**: Dedicated interface for server browsing
 

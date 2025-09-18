@@ -238,13 +238,6 @@ class DynamicServerConfigManager @Inject constructor(
     }
     
     /**
-     * Gets the test server configuration.
-     */
-    fun getTestServer(): ZKyNetServerConfig? {
-        return _servers.value.find { it.isTestServer }
-    }
-    
-    /**
      * Gets all available servers (enabled only).
      */
     fun getAvailableServers(): List<ZKyNetServerConfig> {

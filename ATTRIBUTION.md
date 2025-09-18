@@ -33,9 +33,8 @@ ZKyNet VPN is a customized fork that adds server integration and management capa
 #### Core Functionality Changes
 1. **Server Management**: Added ZKyNet-specific server configuration and management
 2. **User Interface**: Replaced default tunnel-adding flow with per-server VPN toggles
-3. **Configuration Handling**: Added support for hardcoded test server configuration (peer1.conf)
-4. **API Integration**: Implemented automatic config download and caching for production servers
-5. **Custom UI Components**: New server selection and connection interface
+3. **API Integration**: Implemented automatic config download and caching for production servers
+4. **Custom UI Components**: New server selection and connection interface
 
 ## License Compliance
 
