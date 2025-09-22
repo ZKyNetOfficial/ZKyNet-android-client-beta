@@ -9,8 +9,6 @@
     <string name="getting_started_url" translatable="false">https://zkynet.com/docs/getting-started</string>
     <string name="privacy_policy_url" translatable="false">https://zkynet.com/docs/privacy-policy/</string>
 	<string name="docs_wildcards" translatable="false" >https://zkynet.com/docs/auto-tunneling/#use-name-wildcards</string>
-	<string name="donate_url" translatable="false">https://zaneschepke.com/donate/</string>
-    <string name="matrix_url" translatable="false">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="telegram_url" translatable="false">https://t.me/zkynet</string>
     <string name="error_file_extension">File is not a .conf or .zip</string>
     <string name="turn_off_tunnel">Action requires tunnel off</string>
@@ -160,7 +158,6 @@
 	<string name="stop_auto">Stop auto-tunnel</string>
     <string name="tunnel_running">Tunnel running</string>
 	<string name="monitoring_state_changes">Monitoring state changes</string>
-	<string name="donate">Donate to project</string>
 	<string name="local_logging">Local logging</string>
 	<string name="enable_local_logging">Enable local logging</string>
     <string name="add_from_clipboard">Add from clipboard</string>
@@ -208,7 +205,6 @@
 	<string name="search">Search</string>
 	<string name="select">Select</string>
     <string name="join_telegram">Join Telegram community</string>
-	<string name="join_matrix">Join Matrix community</string>
     <string name="dropdown">Dropdown</string>
 	<string name="add_tunnel">Add tunnel</string>
     <string name="export_logs">Export stored logs</string>

@@ -10,7 +10,7 @@ plugins {
 }
 
 android {
-    namespace = Constants.APP_ID
+    namespace = "com.zaneschepke.wireguardautotunnel"
     compileSdk = Constants.TARGET_SDK
 
     androidResources { generateLocaleConfig = true }
@@ -68,28 +68,28 @@ android {
                 "proguard-rules.pro",
             )
             signingConfig = signingConfigs.getByName(Constants.RELEASE)
-            resValue("string", "provider", "\"${Constants.APP_NAME}.provider\"")
+            resValue("string", "provider", "\"com.zkynet.vpn.provider\"")
         }
 
         debug {
             applicationIdSuffix = ".debug"
             resValue("string", "app_name", "ZKyNet - Debug")
             isDebuggable = true
-            resValue("string", "provider", "\"${Constants.APP_NAME}.provider.debug\"")
+            resValue("string", "provider", "\"com.zkynet.vpn.provider.debug\"")
         }
 
         create(Constants.PRERELEASE) {
             initWith(buildTypes.getByName(Constants.RELEASE))
             applicationIdSuffix = ".prerelease"
             resValue("string", "app_name", "ZKyNet - Pre")
-            resValue("string", "provider", "\"${Constants.APP_NAME}.provider.pre\"")
+            resValue("string", "provider", "\"com.zkynet.vpn.provider.pre\"")
         }
 
         create(Constants.NIGHTLY) {
             initWith(buildTypes.getByName(Constants.RELEASE))
             applicationIdSuffix = ".nightly"
             resValue("string", "app_name", "ZKyNet - Nightly")
-            resValue("string", "provider", "\"${Constants.APP_NAME}.provider.nightly\"")
+            resValue("string", "provider", "\"com.zkynet.vpn.provider.nightly\"")
         }
     }
 

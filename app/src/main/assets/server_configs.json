@@ -18,6 +18,6 @@
       "retryDelayMs": 2000,
       "connectionTimeoutMs": 30000,
       "isEnabled": true
-    }
+    },
   ]
 }

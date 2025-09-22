@@ -1,0 +1,15 @@
+ZKyNet provides a fast, private, and open-source VPN connection. Designed with privacy and security in mind, it encrypts your internet traffic and protects your activity from unwanted tracking.
+
+Current features:
+
+Secure VPN connection with no logging
+
+Upload and use your own WireGuard configs
+
+One-tap connect/disconnect
+
+100% open-source
+
+This is the foundation for a next-generation privacy network. Upcoming versions will expand with customizable multi-hop routing, enhanced anonymity, and modular privacy tools.
+
+Our mission: give you control over your digital privacy—without sacrificing usability.

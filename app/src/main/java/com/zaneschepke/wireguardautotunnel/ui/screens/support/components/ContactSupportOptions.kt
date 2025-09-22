@@ -26,21 +26,6 @@ fun ContactSupportOptions(context: android.content.Context) {
                 addAll(
                     listOf(
                         SelectionItem(
-                            leadingIcon = ImageVector.vectorResource(R.drawable.matrix),
-                            title = {
-                                SelectionItemLabel(
-                                    stringResource(R.string.join_matrix),
-                                    SelectionLabelType.TITLE,
-                                )
-                            },
-                            trailing = {
-                                ForwardButton {
-                                    context.openWebUrl(context.getString(R.string.matrix_url))
-                                }
-                            },
-                            onClick = { context.openWebUrl(context.getString(R.string.matrix_url)) },
-                        ),
-                        SelectionItem(
                             leadingIcon = ImageVector.vectorResource(R.drawable.telegram),
                             title = {
                                 SelectionItemLabel(
@@ -85,25 +70,6 @@ fun ContactSupportOptions(context: android.content.Context) {
                         ),
                     )
                 )
-                if (BuildConfig.FLAVOR != Constants.GOOGLE_PLAY_FLAVOR) {
-                    add(
-                        SelectionItem(
-                            leadingIcon = Icons.Filled.Favorite,
-                            title = {
-                                SelectionItemLabel(
-                                    stringResource(R.string.donate),
-                                    SelectionLabelType.TITLE,
-                                )
-                            },
-                            trailing = {
-                                ForwardButton {
-                                    context.openWebUrl(context.getString(R.string.donate_url))
-                                }
-                            },
-                            onClick = { context.openWebUrl(context.getString(R.string.donate_url)) },
-                        )
-                    )
-                }
             }
     )
 }

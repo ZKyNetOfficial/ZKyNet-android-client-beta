@@ -7,7 +7,6 @@
     <string name="docs_url" translatable="false">https://zkynet.com/docs/overview.html</string>
     <string name="privacy_policy_url" translatable="false">https://zkynet.com/docs/privacy-policy.html</string>
     <string name="docs_wildcards" translatable="false">https://zkynet.com/docs/features.html#wildcard-wi-fi-name-support</string>
-    <string name="donate_url" translatable="false">https://zaneschepke.com/donate/</string>
     <string name="error_file_extension">Dosya .conf veya .zip değil</string>
     <string name="turn_off_tunnel">Bu işlem tünelin kapalı olmasını gerektirir</string>
     <string name="no_tunnels">Henüz tünel eklenmedi!</string>
