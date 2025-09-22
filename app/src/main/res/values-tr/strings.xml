@@ -155,7 +155,6 @@
     <string name="stop_auto">Otomatik tüneli durdur</string>
     <string name="tunnel_running">Tünel çalışıyor</string>
     <string name="monitoring_state_changes">Durum değişikliklerini izleme</string>
-    <string name="donate">Projeye bağış yap</string>
     <string name="local_logging">Yerel günlüğe kaydetme</string>
     <string name="enable_local_logging">Yerel günlüğe kaydetmeyi etkinleştir</string>
     <string name="add_from_clipboard">Panodan ekle</string>

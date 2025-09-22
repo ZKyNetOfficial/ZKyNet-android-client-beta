@@ -131,7 +131,6 @@
     <string name="learn_more">Узнать больше</string>
     <string name="kernel_not_supported">Ядро не поддерживается</string>
     <string name="stop_auto">Остановить автотуннель</string>
-    <string name="donate">Пожертвовать на проект</string>
     <string name="local_logging">Локальное ведение журнала</string>
     <string name="wildcards_active">Подстановочные знаки используются</string>
     <string name="skip">Пропустить</string>
@@ -194,7 +193,6 @@
     <string name="search">Поиск</string>
     <string name="wifi_name_template">Активный: %1$s</string>
     <string name="add_from_url">Добавить из URL</string>
-    <string name="join_matrix">Присоединиться к сообществу в Matrix</string>
     <string name="dns_resolve_error">ошибка получения dns</string>
     <string name="kernel_name_error">ошибка имени модуля ядра</string>
     <string name="bio_not_created">Биометрия не создана</string>
@@ -206,7 +204,6 @@
     <string name="app_permission_description">Управление туннелями и функцией автоматического туннелирования.</string>
     <string name="bio_not_supported">Биометрия не поддерживается</string>
     <string name="join_telegram">Присоединиться к сообществу в Telegram</string>
-    <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="camera_permission_required">Требуется доступ к камере</string>
     <string name="select">Выбор</string>
     <string name="dropdown">Выпадающий список</string>

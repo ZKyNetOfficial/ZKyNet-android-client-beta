@@ -61,7 +61,6 @@
     <string name="logs">日誌</string>
     <string name="dark">灰色</string>
     <string name="light">亮色</string>
-    <string name="donate">捐款</string>
     <string name="appearance">外觀</string>
     <string name="display_theme">主題</string>
     <string name="primary_tunnel">主要隧道</string>
@@ -103,7 +102,6 @@
     <string name="enable_remote_app_control">啟用遠端應用程式控制</string>
     <string name="join_telegram">加入 Telegram 社群</string>
     <string name="add_from_url">從 URL 新增</string>
-    <string name="join_matrix">加入 Matrix 社群</string>
     <string name="copy">複製</string>
     <string name="base64_key">base64 格式</string>
     <string name="persistent_keepalive">保持連線</string>

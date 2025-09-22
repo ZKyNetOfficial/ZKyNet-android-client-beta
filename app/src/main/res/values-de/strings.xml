@@ -136,7 +136,6 @@
     <string name="wifi_name_via_shell">WLAN Namen per Shell</string>
     <string name="start_auto">Auto-Tunnel starten</string>
     <string name="tunnel_running">Laufender Tunnel</string>
-    <string name="donate">Fürs Projekt spenden</string>
     <string name="local_logging">Lokales Logging</string>
     <string name="enable_local_logging">Lokales Logging aktivieren</string>
     <string name="add_from_clipboard">Aus Zwischenablage einfügen</string>
@@ -189,10 +188,8 @@
     <string name="select">Auswählen</string>
     <string name="status">Status</string>
     <string name="invalid_config_error">ungültige_konfiguration_fehler</string>
-    <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="search">Suchen</string>
     <string name="config_error">Konfigurationsfehler</string>
-    <string name="join_matrix">Matrix-Community beitreten</string>
     <string name="bio_auth_title">Biometrische Authentifizierung</string>
     <string name="error_download_failed">Download der Konfiguration fehlgeschlagen</string>
     <string name="add_from_url">Von URL hinzufügen</string>

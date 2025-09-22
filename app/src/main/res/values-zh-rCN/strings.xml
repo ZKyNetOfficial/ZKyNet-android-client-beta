@@ -147,7 +147,6 @@
     <string name="monitoring_state_changes">监控状态变化</string>
     <string name="stop_auto">停止自动隧道</string>
     <string name="tunnel_running">隧道运行中</string>
-    <string name="donate">捐赠</string>
     <string name="local_logging">日志</string>
     <string name="enable_local_logging">开启本地日志</string>
     <string name="stop_on_no_internet">无网络时停用</string>
@@ -200,7 +199,6 @@
     <string name="save">保存</string>
     <string name="search">搜索</string>
     <string name="select">选择</string>
-    <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="add_tunnel">添加隧道</string>
     <string name="delete_logs">删除并清除日志</string>
     <string name="copy">复制</string>
@@ -218,7 +216,6 @@
     <string name="bio_update_required">需要生物特征安全更新</string>
     <string name="tunnel_starting">隧道启动中</string>
     <string name="enable_remote_app_control">开启远程应用控制</string>
-    <string name="join_matrix">加入 Matrix 社区</string>
     <string name="wifi_name_template">活跃：%1$s</string>
     <string name="app_permission_description">控制隧道和自动隧道功能.</string>
     <string name="app_permission_title">WG 隧道控制桥</string>

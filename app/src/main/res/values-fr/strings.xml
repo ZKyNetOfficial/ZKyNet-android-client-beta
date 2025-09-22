@@ -145,7 +145,6 @@
     <string name="use_root_shell_for_wifi">Utiliser un shell root pour obtenir le nom du wifi</string>
     <string name="tunnel_running">Tunnel en cours d\'exécution</string>
     <string name="monitoring_state_changes">Surveille les changements d’état</string>
-    <string name="donate">Faire un don au projet</string>
     <string name="local_logging">Journalisation locale</string>
     <string name="enable_local_logging">Activer la journalisation locale</string>
     <string name="kernel_not_supported">Noyau non supporté</string>
@@ -173,7 +172,6 @@
     <string name="include_lan">Inclure le LAN</string>
     <string name="select">Sélectionner</string>
     <string name="join_telegram">Rejoindre la communauté Telegram</string>
-    <string name="join_matrix">Rejoindre la communauté Matrix</string>
     <string name="auto_tunnel_channel_description">Un canal pour les notifications de l\'état du tunnel automatique</string>
     <string name="tunnel_control">Contrôle du tunnel</string>
     <string name="auto_tunnel">Tunnel automatique</string>

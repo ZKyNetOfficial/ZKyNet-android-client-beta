@@ -121,7 +121,6 @@
     <string name="restart_at_boot">Reiniciar al arrancar</string>
     <string name="underload_packet_magic_header">Encabezado del paquete baja carga</string>
     <string name="handshake">Protocolo de intercambio</string>
-    <string name="donate">Donar al proyecto</string>
     <string name="appearance">Apariencia</string>
     <string name="logs">Registros</string>
     <string name="trusted_wifi_names">Nombres de wifis confiables</string>
@@ -189,7 +188,6 @@
     <string name="save">Guardar</string>
     <string name="select">Seleccionar</string>
     <string name="join_telegram">Únete a la comunidad de Telegram</string>
-    <string name="join_matrix">Únete a la comunidad de Matrix</string>
     <string name="share">Compartir</string>
     <string name="update_download_failed">Fallo al descargar actualización.</string>
     <string name="licenses">Licencias</string>

@@ -117,7 +117,6 @@
     <string name="mobile_tunnel">Tunel pro mobilní data</string>
     <string name="skip">Přeskočit</string>
     <string name="kernel_not_supported">Kernel není podporován</string>
-    <string name="donate">Přispět na projekt</string>
     <string name="enable_local_logging">Zapnout místní protokolování</string>
     <string name="stop_on_internet_loss">Zastavit tunel při ztrátě internetu</string>
     <string name="stop_on_no_internet">Zastavit při ztrátě internetu</string>
@@ -168,7 +167,6 @@
     <string name="multiple">Několik</string>
     <string name="enter_config_url">Zadejte adresu URL konfigurace</string>
     <string name="search">Hledat</string>
-    <string name="join_matrix">Připojte se k Matrix komunitě</string>
     <string name="join_telegram">Připojte se k Telegram komunitě</string>
     <string name="post_down">Po deaktivaci</string>
     <string name="invalid_config_error">chyba_neplatné_konfigurace</string>

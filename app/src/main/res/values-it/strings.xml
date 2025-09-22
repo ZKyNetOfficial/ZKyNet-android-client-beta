@@ -133,7 +133,6 @@
     <string name="launch_app_settings">Opzioni di avvio della app</string>
     <string name="learn_more">Approfondisci</string>
     <string name="wildcards_active">Caratteri jolly attivi</string>
-    <string name="donate">Dona al progetto</string>
     <string name="enable_local_logging">Abilita logging locale</string>
     <string name="monitoring_state_changes">Monitora i cambi di stato</string>
     <string name="stop">arrestato</string>
@@ -193,7 +192,6 @@
     <string name="multiple">Molteplici</string>
     <string name="add_from_url">Aggiungi da URL</string>
     <string name="join_telegram">Unisciti alla comunità Telegram</string>
-    <string name="join_matrix">Unisciti alla comunità Matrix</string>
     <string name="app_permission_title">WG Tunnel Control Bridge</string>
     <string name="select">Seleziona</string>
     <string name="hide_scripts">Nascondi gli script</string>

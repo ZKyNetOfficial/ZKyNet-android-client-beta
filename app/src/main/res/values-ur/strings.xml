@@ -101,7 +101,6 @@
     <string name="learn_more">مزید جانیں</string>
     <string name="kernel_not_supported">کرنل سپورٹڈ نہیں</string>
     <string name="start_auto">خودکار ٹنل چلائیں</string>
-    <string name="donate">پروجیکٹ کے لیے عطیہ کریں</string>
     <string name="local_logging">مقامی لاگنگ</string>
     <string name="enable_local_logging">مقامی لاگنگ فعال کریں</string>
     <string name="stop_on_no_internet">بغیر انٹرنیٹ پر روکیں</string>
@@ -197,7 +196,6 @@
     <string name="search">تلاش</string>
     <string name="select">منتخب</string>
     <string name="join_telegram">ٹیلیگرام کمیونٹی میں شامل ہوں</string>
-    <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="dropdown">ڈراپ ڈاؤن</string>
     <string name="add_tunnel">ٹنل شامل کریں</string>
     <string name="export_logs">ذخیرہ شدہ لاگز برآمد کریں</string>
@@ -222,7 +220,6 @@
     <string name="bio_update_required">بائیومیٹرک سیکیورٹی تازہ کاری درکار ہے</string>
     <string name="tunnel_starting">ٹنل شروع ہو رہی ہے</string>
     <string name="nothing_here_yet">ابھی تک یہاں کچھ نہیں!</string>
-    <string name="join_matrix">میٹرکس کمیونٹی میں شامل ہوں</string>
     <string name="delete_logs">لاگز حذف اور صاف کریں</string>
     <string name="export_tunnels_amnezia">ٹنلز بطور ایمنیزیا برآمد کریں</string>
     <string name="bio_subtitle">اپنی بائیومیٹرک اسناد کا استعمال کرتے ہوئے لاگ ان کریں</string>

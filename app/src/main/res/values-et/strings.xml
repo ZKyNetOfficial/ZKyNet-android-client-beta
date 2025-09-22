@@ -75,7 +75,6 @@
     <string name="search">Otsi</string>
     <string name="select">Vali</string>
     <string name="join_telegram">Liitu kogukonnaga Telegramis</string>
-    <string name="join_matrix">Liitu kogukonnaga Matrixis</string>
     <string name="add_tunnel">Lisa tunnel</string>
     <string name="export_logs">Ekspordi salvestatud logid</string>
     <string name="delete_logs">Kustuta ja eemalda logid</string>
@@ -94,7 +93,6 @@
     <string name="remove_amnezia_compatibility">Eemalda ühilduvus Amnezia teenustega</string>
     <string name="show_amnezia_properties">Näita Amnezia seadistusi</string>
     <string name="hide_amnezia_properties">Peida Amnezia seadistused</string>
-    <string name="donate">Toeta projekti rahaliselt</string>
     <string name="local_logging">Kohalik logimine</string>
     <string name="enable_local_logging">Logi andmed nutiseadmes</string>
     <string name="add_from_clipboard">Lisa lõikelaualt</string>

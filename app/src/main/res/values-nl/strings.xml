@@ -160,7 +160,6 @@
     <string name="start_auto">Start auto-tunnel</string>
     <string name="stop_auto">Stop auto-tunnel</string>
     <string name="tunnel_running">Tunnel actief</string>
-    <string name="donate">Doneer aan project</string>
     <string name="local_logging">Lokale logboeken</string>
     <string name="monitoring_state_changes">Monitor statuswijzigingen</string>
     <string name="trusted_wifi_names">Vertrouwde Wifi namen</string>

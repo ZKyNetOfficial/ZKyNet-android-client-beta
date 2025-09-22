@@ -83,7 +83,6 @@
     <string name="location_services_not_detected">Usługi lokalizacyjne nie zostały wykryte</string>
     <string name="background_location_message">Ta funkcja wymaga zezwolenia na określenie lokalizacji w dowolnym momencie i/lub dokładnej lokalizacji. Sprawdź</string>
     <string name="auto_tunnel_title">Usługa autotunelu</string>
-    <string name="donate">Przekaż darowiznę na rzecz projektu</string>
     <string name="trusted_ssid_value_description">Prześlij SSID</string>
     <string name="all">wszystkie</string>
     <string name="no_email_detected">Nie wykryto aplikacji pocztowej</string>
@@ -203,8 +202,6 @@
     <string name="enter_config_url">Wpisz adres URL konfiguracji</string>
     <string name="save">Zapisz</string>
     <string name="search">Szukaj</string>
-    <string name="join_matrix">Dołącz do społeczności Matriksa</string>
-    <string name="matrix_url">https://matrix.to/#/#wg-tunnel-space:matrix.org</string>
     <string name="export_logs">Eksportuj zapisane dzienniki</string>
     <string name="copy">Skopiuj</string>
     <string name="info">Informacje</string>

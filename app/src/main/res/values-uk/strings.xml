@@ -145,7 +145,6 @@
     <string name="quick_actions">Швидкі дії</string>
     <string name="tunnel_running">Тунель працює</string>
     <string name="monitoring_state_changes">Відстеження змін стану</string>
-    <string name="donate">Пожертвувати на проект</string>
     <string name="add_from_clipboard">Додати з буфера обміну</string>
     <string name="stop_on_no_internet">Зупинити без інтернету</string>
     <string name="native_kill_switch">Штатне екстрене відключення</string>

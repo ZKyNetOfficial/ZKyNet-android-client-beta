@@ -141,7 +141,6 @@
     <string name="stop_auto">Pausar túnel automático</string>
     <string name="monitoring_state_changes">Monitorar status de alterações</string>
     <string name="tunnel_running">Túnel em execução</string>
-    <string name="donate">Contribua com esse projeto</string>
     <string name="local_logging">Registro local</string>
     <string name="enable_local_logging">Ativar registro local</string>
     <string name="stop_on_no_internet">Interromper quando não há internet</string>

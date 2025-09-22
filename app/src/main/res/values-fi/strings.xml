@@ -71,7 +71,6 @@
     <string name="always_on_message">VPN-yhteyden käyttöoikeus on evätty. Tarkista</string>
     <string name="prominent_background_location_message">Tämä toiminto vaatii taustapaikannusoikeuden, jotta Wi-Fi SSID:n seuranta on mahdollista myös sovelluksen ollessa suljettuna. Lisätietoja löydät Tuki-näkymään linkatusta tietosuojakäytännöstä.</string>
     <string name="optional_default">"valinnainen, oletus: "</string>
-    <string name="donate">Lahjoita projektille</string>
     <string name="add_from_clipboard">Lisää leikepöydältä</string>
     <string name="ethernet_tunnel">Ethernet-tunneli</string>
     <string name="quick_actions">Pikatoiminnot</string>
