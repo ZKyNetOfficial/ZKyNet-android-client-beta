@@ -6,30 +6,33 @@ AuthorName: ZKyNet
 AuthorEmail: support@zkynet.com
 AuthorWebSite: https://zkynet.com
 WebSite: https://zkynet.com
-SourceCode: https://github.com/ZKyNet/zkynet-android-client
-IssueTracker: https://github.com/ZKyNet/zkynet-android-client/issues
-Changelog: https://github.com/ZKyNet/zkynet-android-client/releases
+SourceCode: https://github.com/ZKyNetOfficial/ZKyNet-android-client-beta
+IssueTracker: https://github.com/ZKyNetOfficial/ZKyNet-android-client-beta/issues
+Changelog: https://github.com/ZKyNetOfficial/ZKyNet-android-client-beta/releases
 
 AutoName: ZKyNet VPN
 Name: ZKyNet VPN
-Summary: Privacy-focused VPN with zero-knowledge architecture
+Summary: Free VPN client with WireGuard and AmneziaWG support
 
 Description: |-
-    ZKyNet VPN provides privacy-focused VPN connectivity with zero-knowledge architecture.
+    ZKyNet VPN is a free, open-source VPN client that prioritizes privacy and ease of use.
     
     Features:
-    * WireGuard and AmneziaWG protocol support
+    * WireGuard and AmneziaWG protocol support for enhanced security
+    * Import and use your own custom VPN configurations
     * Auto-tunneling based on network conditions
-    * Privacy-preserving server management
+    * Kill switch protection
     * No logging policy
-    * Open source MIT license
+    * 100% open source (MIT License)
     
-    Built on a foundation of zero-compromise privacy principles.
+    Perfect for users who want control over their VPN configurations while maintaining privacy.
+    Compatible with standard WireGuard configs and specialized AmneziaWG setups for bypassing
+    deep packet inspection.
     
-    Based on WG Tunnel by Zane Schepke, licensed under MIT License.
+    Based on WG Tunnel by Zane Schepke, enhanced with additional privacy features.
 
 RepoType: git
-Repo: https://github.com/ZKyNet/zkynet-android-client.git
+Repo: https://github.com/ZKyNetOfficial/ZKyNet-android-client-beta.git
 
 Builds:
   - versionName: '1.0.0'

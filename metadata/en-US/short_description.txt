@@ -1,1 +1,1 @@
-Open source VPN client with custom config support.
+Free VPN client with WireGuard and AmneziaWG support

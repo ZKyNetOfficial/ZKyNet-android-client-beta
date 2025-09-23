@@ -1,15 +1,14 @@
-ZKyNet provides a fast, private, and open-source VPN connection. Designed with privacy and security in mind, it encrypts your internet traffic and protects your activity from unwanted tracking.
+ZKyNet VPN is a free, open-source VPN client that prioritizes privacy and ease of use.
 
-Current features:
+Key Features:
+• WireGuard and AmneziaWG protocol support for enhanced security
+• Import and use your own custom VPN configurations
+• Auto-tunneling based on network conditions
+• One-tap connect/disconnect
+• Kill switch protection
+• No logging policy
+• 100% open source (MIT License)
 
-Secure VPN connection with no logging
+Perfect for users who want control over their VPN configurations while maintaining privacy. Compatible with standard WireGuard configs and specialized AmneziaWG setups for bypassing deep packet inspection.
 
-Upload and use your own WireGuard configs
-
-One-tap connect/disconnect
-
-100% open-source
-
-This is the foundation for a next-generation privacy network. Upcoming versions will expand with customizable multi-hop routing, enhanced anonymity, and modular privacy tools.
-
-Our mission: give you control over your digital privacy—without sacrificing usability.
+Based on WG Tunnel by Zane Schepke, enhanced with additional privacy features.
