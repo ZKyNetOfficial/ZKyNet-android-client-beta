@@ -50,8 +50,8 @@
     <string name="turn_on_tunnel">Action requires active tunnel</string>
     
     <!-- Legal Acceptance Screen -->
-    <string name="legal_welcome_title">Welcome to ZKyNet VPN</string>
-    <string name="legal_welcome_message">Thank you for choosing ZKyNet VPN. To continue, please review and accept the following terms.</string>
+    <string name="legal_welcome_title">Welcome to the Founder Edition</string>
+    <string name="legal_welcome_message">You\'re part of the first wave building the future of privacy. Sign up for email updates to unlock early adopter rewards and stay connected as we grow.</string>
     <string name="legal_documents_title">Terms &amp; Privacy</string>
     <string name="legal_terms_checkbox">I accept the Terms of Service</string>
     <string name="legal_privacy_checkbox">I accept the Privacy Policy</string>

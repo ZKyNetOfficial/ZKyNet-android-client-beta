@@ -39,9 +39,9 @@ object VisionContentProvider {
         return VisionContent(
             aboutTitle = "About ZKyNet",
             aboutParagraphs = listOf(
-                "ZKyNet aims to make strong, decentralized privacy tools not only accessible but widely adopted.",
-                "By unifying proven technologies into a seamless experience, we're building a platform that balances user-friendly design, industry-grade scalability, and meaningful rewards for the people who keep the network running.",
-                "The result? Better privacy for everyone by design, not by sacrifice."
+                "Welcome to the Founder Edition you're here early, and that means everything. This is just the foundation of what we're building together.",
+                "ZKyNet aims to make strong, decentralized privacy tools not only accessible but widely adopted. By unifying proven technologies into a seamless experience, we're building a platform that balances user-friendly design, industry-grade scalability, and meaningful rewards for the people who keep the network running.",
+                "The result? Better privacy for everyone by design, not by sacrifice. As a founding user, you're helping prove this vision works."
             ),
             principlesTitle = "Core Principles",
             principles = listOf(
