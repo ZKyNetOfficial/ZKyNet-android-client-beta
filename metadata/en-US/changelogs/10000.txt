@@ -1,8 +1,0 @@
-ZKyNet VPN v1.0.0 - Initial Release
-
-• Complete rebrand to ZKyNet VPN identity
-• WireGuard and AmneziaWG protocol support
-• Auto-tunneling based on network conditions
-• Privacy-preserving architecture
-• Open source MIT license
-• Based on WG Tunnel by Zane Schepke

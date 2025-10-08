@@ -68,6 +68,7 @@ import com.zaneschepke.wireguardautotunnel.ui.screens.settings.logs.LogsScreen
 import com.zaneschepke.wireguardautotunnel.ui.screens.support.SupportScreen
 import com.zaneschepke.wireguardautotunnel.ui.screens.support.license.LicenseScreen
 import com.zaneschepke.wireguardautotunnel.ui.screens.vision.VisionScreen
+import com.zaneschepke.wireguardautotunnel.ui.screens.legal.LegalAcceptanceScreen
 import com.zaneschepke.wireguardautotunnel.ui.theme.WireguardAutoTunnelTheme
 import com.zaneschepke.wireguardautotunnel.util.extensions.isRunningOnTv
 import com.zaneschepke.wireguardautotunnel.viewmodel.AppViewModel
@@ -259,9 +260,13 @@ class MainActivity : AppCompatActivity() {
                                 NavHost(
                                     navController,
                                     startDestination =
-                                        (if (appUiState.appState.isPinLockEnabled) Route.Lock
-                                        else Route.Main),
+                                        if (!appUiState.appState.isLegalAccepted) Route.LegalAcceptance
+                                        else if (appUiState.appState.isPinLockEnabled) Route.Lock
+                                        else Route.Main,
                                 ) {
+                                    composable<Route.LegalAcceptance> {
+                                        LegalAcceptanceScreen(viewModel)
+                                    }
                                     composable<Route.Main> {
                                         ConnectScreen(appUiState, appViewState, viewModel, configManager)
                                     }

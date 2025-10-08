@@ -1,0 +1,16 @@
+ZKyNet VPN v1.0.0 - Founder's Edition
+
+This is the early version — our foundation, not our final form.
+
+What's Included:
+• WireGuard and AmneziaWG protocol support
+• Auto-tunneling based on network conditions
+• Privacy-preserving architecture
+• Open source MIT license
+
+What's Coming:
+We're building toward a hybrid zero-knowledge architecture that eliminates today's privacy trade-offs. This version establishes our technical credibility while we develop the differentiating features.
+
+Join us as an early believer. Your feedback shapes what we build next.
+
+Based on WG Tunnel by Zane Schepke.

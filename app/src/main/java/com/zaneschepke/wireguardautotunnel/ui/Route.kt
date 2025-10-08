@@ -3,6 +3,8 @@ package com.zaneschepke.wireguardautotunnel.ui
 import kotlinx.serialization.Serializable
 
 sealed class Route {
+    @Serializable data object LegalAcceptance : Route()
+
     @Serializable data object Vision : Route()
 
     @Serializable data object Settings : Route()

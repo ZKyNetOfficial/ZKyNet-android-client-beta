@@ -7,6 +7,7 @@ import com.zaneschepke.wireguardautotunnel.domain.model.AppState
 import com.zaneschepke.wireguardautotunnel.domain.repository.AppStateRepository
 import com.zaneschepke.wireguardautotunnel.ui.theme.Theme
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import timber.log.Timber
 
@@ -119,6 +120,19 @@ class DataStoreAppStateRepository(private val dataStoreManager: DataStoreManager
         return dataStoreManager.getFromStore(DataStoreManager.remoteKey)
     }
 
+    override suspend fun isLegalAccepted(): Boolean {
+        return dataStoreManager.getFromStore(DataStoreManager.isLegalAccepted)
+            ?: GeneralState.IS_LEGAL_ACCEPTED_DEFAULT
+    }
+
+    override suspend fun setLegalAccepted(accepted: Boolean) {
+        dataStoreManager.saveToDataStore(DataStoreManager.isLegalAccepted, accepted)
+    }
+
+    override suspend fun getAppState(): AppState {
+        return flow.first()
+    }
+
     override val flow: Flow<AppState> =
         dataStoreManager.preferencesFlow
             .map { prefs ->
@@ -147,6 +161,8 @@ class DataStoreAppStateRepository(private val dataStoreManager: DataStoreManager
                             remoteKey = pref[DataStoreManager.remoteKey],
                             locale = pref[DataStoreManager.locale],
                             theme = getTheme(),
+                            isLegalAccepted = pref[DataStoreManager.isLegalAccepted] 
+                                ?: GeneralState.IS_LEGAL_ACCEPTED_DEFAULT,
                         )
                     } catch (e: IllegalArgumentException) {
                         Timber.e(e)

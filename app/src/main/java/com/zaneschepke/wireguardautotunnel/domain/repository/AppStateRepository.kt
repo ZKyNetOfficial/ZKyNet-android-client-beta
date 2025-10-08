@@ -41,5 +41,11 @@ interface AppStateRepository {
 
     suspend fun getRemoteKey(): String?
 
+    suspend fun isLegalAccepted(): Boolean
+    
+    suspend fun setLegalAccepted(accepted: Boolean)
+
+    suspend fun getAppState(): AppState
+
     val flow: Flow<AppState>
 }

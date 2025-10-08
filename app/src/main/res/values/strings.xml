@@ -48,6 +48,19 @@
     <string name="vpn_off">VPN off</string>
     <string name="create_import">Create from scratch</string>
     <string name="turn_on_tunnel">Action requires active tunnel</string>
+    
+    <!-- Legal Acceptance Screen -->
+    <string name="legal_welcome_title">Welcome to ZKyNet VPN</string>
+    <string name="legal_welcome_message">Thank you for choosing ZKyNet VPN. To continue, please review and accept the following terms.</string>
+    <string name="legal_documents_title">Terms &amp; Privacy</string>
+    <string name="legal_terms_checkbox">I accept the Terms of Service</string>
+    <string name="legal_privacy_checkbox">I accept the Privacy Policy</string>
+    <string name="legal_terms_link">Terms of Service</string>
+    <string name="legal_privacy_link">Privacy Policy</string>
+    <string name="legal_agreement_text">By proceeding, you acknowledge that you have read, understood, and agree to be bound by our terms and policies.</string>
+    <string name="legal_accept">Accept &amp; Continue</string>
+    <string name="legal_decline">Decline</string>
+    <string name="legal_must_accept_both">Please accept both agreements to continue.</string>
     <string name="add_peer">Add peer</string>
 	<string name="interface_">Interface</string>
     <string name="rotate_keys">Rotate keys</string>

@@ -12,6 +12,7 @@ data class GeneralState(
     val remoteKey: String? = null,
     val locale: String? = null,
     val theme: Theme = Theme.AUTOMATIC,
+    val isLegalAccepted: Boolean = IS_LEGAL_ACCEPTED_DEFAULT,
 ) {
 
     companion object {
@@ -20,5 +21,6 @@ data class GeneralState(
         const val PIN_LOCK_ENABLED_DEFAULT = false
         const val IS_LOGS_ENABLED_DEFAULT = false
         const val IS_REMOTE_CONTROL_ENABLED = false
+        const val IS_LEGAL_ACCEPTED_DEFAULT = false
     }
 }

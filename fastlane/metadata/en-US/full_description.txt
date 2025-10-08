@@ -1,0 +1,29 @@
+🚀 FOUNDER'S EDITION - JOIN THE FIRST WAVE
+
+This is just the start — the version you see now is our foundation. We're building toward a privacy infrastructure that doesn't force compromises. If that's something you believe in, we'd love to have you as part of the first wave.
+
+📱 WHAT THIS VERSION HAS:
+• WireGuard and AmneziaWG protocol support
+• Import your own custom VPN configurations
+• Auto-tunneling based on network conditions
+• One-tap connect/disconnect
+• Kill switch protection
+• No logging policy
+• 100% open source (MIT License)
+
+🎯 WHAT WE'RE BUILDING TOWARD:
+ZKyNet is developing a hybrid zero-knowledge architecture that strategically combines centralized and decentralized infrastructure. The goal: eliminate the trade-offs between privacy, speed, and usability that plague today's tools.
+
+This current version proves we can build production-quality backend systems. The differentiating features are coming.
+
+💡 WHY JOIN AS AN EARLY ADOPTER:
+• Help shape the roadmap with real feedback
+• Be part of the community that defines how privacy infrastructure should work
+• Support an open-source alternative that's transparent about where it is and where it's going
+
+⚠️ TRANSPARENCY:
+This version is missing features we're actively developing. It's not the finished product — it's the foundation. We're launching now to build with believers, not to compete with established players yet.
+
+If you care about privacy-preserving infrastructure and want to support its development, your early adoption is invaluable.
+
+Based on WG Tunnel by Zane Schepke (MIT License), customized for ZKyNet's mission.

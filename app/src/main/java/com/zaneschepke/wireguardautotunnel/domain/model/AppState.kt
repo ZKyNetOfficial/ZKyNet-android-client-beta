@@ -12,4 +12,5 @@ data class AppState(
     val remoteKey: String?,
     val locale: String?,
     val theme: Theme,
+    val isLegalAccepted: Boolean = false,
 )

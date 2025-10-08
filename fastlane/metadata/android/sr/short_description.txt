@@ -1,1 +1,0 @@
-Alternativna VPN klijent aplikacija za WireGuard sa dodatnim funkcijama

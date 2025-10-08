@@ -1,1 +1,0 @@
-WireGuard için ek özelliklere sahip alternatif bir VPN istemci uygulaması

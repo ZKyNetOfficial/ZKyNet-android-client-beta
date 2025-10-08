@@ -1,1 +1,0 @@
-Free VPN client with WireGuard and AmneziaWG support

@@ -16,6 +16,7 @@ object GeneralStateMapper {
                 remoteKey,
                 locale,
                 theme,
+                isLegalAccepted,
             )
         }
 
@@ -31,6 +32,7 @@ object GeneralStateMapper {
                 remoteKey,
                 locale,
                 theme,
+                isLegalAccepted,
             )
         }
     }

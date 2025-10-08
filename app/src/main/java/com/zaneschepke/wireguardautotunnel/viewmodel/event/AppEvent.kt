@@ -134,4 +134,6 @@ sealed class AppEvent {
     data class SetShowModal(val modalType: AppViewState.ModalType) : AppEvent()
 
     data object ToggleSelectAllTunnels : AppEvent()
+
+    data object AcceptLegalTerms : AppEvent()
 }

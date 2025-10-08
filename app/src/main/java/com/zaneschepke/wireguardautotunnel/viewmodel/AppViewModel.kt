@@ -249,6 +249,7 @@ constructor(
 
                     is AppEvent.SetDetectionMethod ->
                         handleSetDetectionMethod(event.detectionMethod, state.appSettings)
+                    AppEvent.AcceptLegalTerms -> handleAcceptLegalTerms()
                 }
             }
         }
@@ -369,6 +370,14 @@ constructor(
                 _logs.update { emptyList() }
             }
         }
+    }
+
+    private suspend fun handleAcceptLegalTerms() {
+        Timber.d("Legal terms acceptance started")
+        appDataRepository.appState.setLegalAccepted(true)
+        Timber.d("Legal terms accepted in DataStore - letting Compose handle navigation")
+        // The NavHost will automatically navigate when the state flow updates
+        // No need to force restart - trust Compose's reactive system
     }
 
     private suspend fun handleSetDebounceDelay(appSettings: AppSettings, delay: Int) =
