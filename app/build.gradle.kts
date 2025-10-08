@@ -59,17 +59,21 @@ android {
             listOf("libwg-go.so", "libwg-quick.so", "libwg.so")
         )
 
-        release {
-            isDebuggable = false
-            isMinifyEnabled = true
-            isShrinkResources = true
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro",
-            )
-            signingConfig = signingConfigs.getByName(Constants.RELEASE)
-            resValue("string", "provider", "\"com.zkynet.vpn.provider\"")
-        }
+	release {
+    	isDebuggable = false
+    	isMinifyEnabled = true
+    	isShrinkResources = true
+    	proguardFiles(
+        	getDefaultProguardFile("proguard-android-optimize.txt"),
+        	"proguard-rules.pro",
+    	)
+    	// Only sign non-fdroid releases
+    	if (project.gradle.startParameter.taskNames.none { it.contains("Fdroid") }) {
+        	signingConfig = signingConfigs.getByName(Constants.RELEASE)
+    	}
+    	resValue("string", "provider", "\"com.zkynet.vpn.provider\"")
+	}
+
 
         debug {
             applicationIdSuffix = ".debug"
