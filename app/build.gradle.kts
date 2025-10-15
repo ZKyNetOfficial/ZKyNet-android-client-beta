@@ -52,6 +52,12 @@ android {
             keyPassword =
                 LocalProperties.get("SIGNING_KEY_PASSWORD") ?: System.getenv("SIGNING_KEY_PASSWORD")
         }
+        create("fdroid") {
+            storeFile = file("../keystore/fdroid_release.jks")
+            storePassword = "zkynet_fdroid_store_2025"
+            keyAlias = "zkynet_fdroid"
+            keyPassword = "zkynet_fdroid_store_2025"
+        }
     }
 
     buildTypes {
@@ -67,8 +73,10 @@ android {
         	getDefaultProguardFile("proguard-android-optimize.txt"),
         	"proguard-rules.pro",
     	)
-    	// Only sign non-fdroid releases
-    	if (project.gradle.startParameter.taskNames.none { it.contains("Fdroid") }) {
+    	// Sign with appropriate key based on flavor
+    	if (project.gradle.startParameter.taskNames.any { it.contains("Fdroid", ignoreCase = true) }) {
+        	signingConfig = signingConfigs.getByName("fdroid")
+    	} else {
         	signingConfig = signingConfigs.getByName(Constants.RELEASE)
     	}
     	resValue("string", "provider", "\"com.zkynet.vpn.provider\"")
@@ -135,12 +143,7 @@ android {
         variant.outputs
             .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
             .forEach { output ->
-                val outputFileName =
-                    if (variant.flavorName == "fdroid" && variant.buildType.name == "release") {
-                        "${Constants.APP_NAME}-fdroid-release-${variant.versionName}.apk"
-                    } else {
-                        "${Constants.APP_NAME}-${variant.flavorName}-v${variant.versionName}.apk"
-                    }
+                val outputFileName = "${Constants.APP_NAME}-${variant.flavorName}-v${variant.versionName}.apk"
                 output.outputFileName = outputFileName
             }
     }
